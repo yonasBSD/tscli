@@ -1,3 +1,5 @@
+// cmd/tscli/get/device/cli.go
+
 package device
 
 import (
@@ -23,7 +25,6 @@ func Command() *cobra.Command {
 			}
 
 			all, err := cmd.Flags().GetBool("all")
-
 			if err != nil {
 				return fmt.Errorf("failed to get all flag: %w", err)
 			}
@@ -53,13 +54,20 @@ func Command() *cobra.Command {
 			}
 			fmt.Fprintln(os.Stdout, string(out))
 			return nil
-
 		},
 	}
 
+	command.Flags().Bool(
+		"all",
+		false,
+		"Include advanced fields such as ClientConnectivity, AdvertisedRoutes, and EnabledRoutes (equivalent to the API query '?fields=all'). Example: --all",
+	)
 
-	command.Flags().Bool("all", false, "Display all fields in result.")
-	command.Flags().String("device", "", "Device ID to get.")
+	command.Flags().String(
+		"device",
+		"",
+		`Device identifier to query. Accepts either the preferred nodeId ("node-abcdef123456") or the numeric legacy id ("123456"). Example: --device=node-abcdef123456`,
+	)
 	_ = command.MarkFlagRequired("device")
 
 	return command

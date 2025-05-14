@@ -1,3 +1,5 @@
+// cmd/tscli/list/devices/cli.go
+
 package devices
 
 import (
