@@ -1,4 +1,11 @@
 // cmd/tscli/list/devices/cli.go
+//
+// `tscli list devices [--all]`
+// Prints every device in the tailnet.
+//
+// * With no flag it returns the “standard” fields the public API shows by
+//   default.
+// * With `--all` it requests every possible field (`?fields=all`).
 
 package devices
 
@@ -13,36 +20,38 @@ import (
 )
 
 func Command() *cobra.Command {
-	command := &cobra.Command{
-		Use:   "devices",
-		Short: "List device commands",
-		Long:  "List devices in the Tailscale API",
-		RunE: func(cmd *cobra.Command, args []string) error {
+	var showAll bool
 
+	cmd := &cobra.Command{
+		Use:   "devices",
+		Short: "List devices",
+		Long: `List every device registered in your tailnet.
+
+By default only the common fields are returned.  
+Use --all to include advanced fields such as ClientConnectivity, AdvertisedRoutes, and EnabledRoutes.
+
+Examples
+
+  # Standard view
+  tscli list devices
+
+  # Full view (all fields)
+  tscli list devices --all
+`,
+		RunE: func(cmd *cobra.Command, args []string) error {
 			client, err := tscli.New()
 			if err != nil {
 				return fmt.Errorf("failed to create client: %w", err)
 			}
 
-			all, err := cmd.Flags().GetBool("all")
-
-			if err != nil {
-				return fmt.Errorf("failed to get all flag: %w", err)
-			}
-
 			var devices []tsapi.Device
-
-			if all {
+			if showAll {
 				devices, err = client.Devices().ListWithAllFields(cmd.Context())
-				if err != nil {
-					return fmt.Errorf("failed to list devices with all fields: %w", err)
-				}
 			} else {
-
 				devices, err = client.Devices().List(cmd.Context())
-				if err != nil {
-					return fmt.Errorf("failed to list devices: %w", err)
-				}
+			}
+			if err != nil {
+				return fmt.Errorf("failed to list devices: %w", err)
 			}
 
 			out, err := json.MarshalIndent(devices, "", "  ")
@@ -51,11 +60,16 @@ func Command() *cobra.Command {
 			}
 			fmt.Fprintln(os.Stdout, string(out))
 			return nil
-
 		},
 	}
 
-	command.Flags().Bool("all", false, "Display all fields in result.")
+	// ---------------- flags ----------------
+	cmd.Flags().BoolVar(
+		&showAll,
+		"all",
+		false,
+		"Include every field returned by the API (equivalent to '?fields=all').",
+	)
 
-	return command
+	return cmd
 }

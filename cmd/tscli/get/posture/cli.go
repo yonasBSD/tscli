@@ -1,4 +1,8 @@
 // cmd/tscli/get/posture/cli.go
+//
+// `tscli get posture --device <id>`
+// Fetch the custom posture-attribute map for a device.
+
 package posture
 
 import (
@@ -11,39 +15,51 @@ import (
 )
 
 func Command() *cobra.Command {
-	command := &cobra.Command{
-		Use:   "posture",
-		Short: "Get posture commands",
-		Long:  "Get commands that return the posture of a device",
-		RunE: func(cmd *cobra.Command, args []string) error {
+	var deviceID string
 
+	cmd := &cobra.Command{
+		Use:   "posture",
+		Short: "Get posture attributes for a device",
+		Long: `Return all custom posture attributes currently set on a device.
+
+Example
+
+  tscli get posture --device node-abcdef123456
+`,
+		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+			if deviceID == "" {
+				return fmt.Errorf("--device is required")
+			}
+			return nil
+		},
+		RunE: func(cmd *cobra.Command, args []string) error {
 			client, err := tscli.New()
 			if err != nil {
 				return fmt.Errorf("failed to create client: %w", err)
 			}
 
-			deviceID, err := cmd.Flags().GetString("device")
+			attrs, err := client.Devices().GetPostureAttributes(cmd.Context(), deviceID)
 			if err != nil {
-				return fmt.Errorf("failed to get device flag: %w", err)
+				return fmt.Errorf("failed to get posture attributes: %w", err)
 			}
 
-			attributes, err := client.Devices().GetPostureAttributes(cmd.Context(), deviceID)
+			out, err := json.MarshalIndent(attrs, "", "  ")
 			if err != nil {
-				return fmt.Errorf("failed to list devices with all fields: %w", err)
-			}
-
-			out, err := json.MarshalIndent(attributes, "", "  ")
-			if err != nil {
-				return fmt.Errorf("failed to marshal attributes into JSON: %w", err)
+				return fmt.Errorf("failed to marshal JSON: %w", err)
 			}
 			fmt.Fprintln(os.Stdout, string(out))
 			return nil
-
 		},
 	}
 
-	command.Flags().String("device", "", `Device ID to get (nodeId "node-abc123" or numeric id). Example: --device=node-abcdef123456`,)
-	_ = command.MarkFlagRequired("device")
+	// ---------------- flags ----------------
+	cmd.Flags().StringVar(
+		&deviceID,
+		"device",
+		"",
+		`Device ID to query (nodeId "node-abc123" or numeric id). Example: --device node-abcdef123456`,
+	)
+	_ = cmd.MarkFlagRequired("device")
 
-	return command
+	return cmd
 }

@@ -1,4 +1,4 @@
-// cmd/tscli/devices/routes/command.go
+// cmd/tscli/set/device/routes/command.go
 //
 // `tscli devices routes --device <id> --route 10.0.0.0/24 --route 192.168.1.0/24`
 // Replaces the enabled subnet-routes list on the device.

@@ -1,5 +1,15 @@
 // cmd/tscli/get/device/cli.go
-
+//
+// Fetch details for a single device.
+//
+// Examples
+//
+//   # Standard fields
+//   tscli get device --device node-abcdef123456
+//
+//   # Every field the API can return
+//   tscli get device --device node-abcdef123456 --all
+//
 package device
 
 import (
@@ -13,62 +23,61 @@ import (
 )
 
 func Command() *cobra.Command {
-	command := &cobra.Command{
-		Use:   "device",
-		Short: "Get device commands",
-		Long:  "Get a device's information from the Tailscale API",
-		RunE: func(cmd *cobra.Command, args []string) error {
+	var (
+		showAll  bool
+		deviceID string
+	)
 
+	cmd := &cobra.Command{
+		Use:   "device",
+		Short: "Get a device's information",
+		Long:  "Return a single device record from the Tailscale API.",
+		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+			if deviceID == "" {
+				return fmt.Errorf("--device is required")
+			}
+			return nil
+		},
+		RunE: func(cmd *cobra.Command, args []string) error {
 			client, err := tscli.New()
 			if err != nil {
 				return fmt.Errorf("failed to create client: %w", err)
 			}
 
-			all, err := cmd.Flags().GetBool("all")
-			if err != nil {
-				return fmt.Errorf("failed to get all flag: %w", err)
-			}
-
-			deviceID, err := cmd.Flags().GetString("device")
-			if err != nil {
-				return fmt.Errorf("failed to get device flag: %w", err)
-			}
-
-			var device *tsapi.Device
-
-			if all {
-				device, err = client.Devices().GetWithAllFields(cmd.Context(), deviceID)
-				if err != nil {
-					return fmt.Errorf("failed to list devices with all fields: %w", err)
-				}
+			var d *tsapi.Device
+			if showAll {
+				d, err = client.Devices().GetWithAllFields(cmd.Context(), deviceID)
 			} else {
-				device, err = client.Devices().Get(cmd.Context(), deviceID)
-				if err != nil {
-					return fmt.Errorf("failed to list devices: %w", err)
-				}
+				d, err = client.Devices().Get(cmd.Context(), deviceID)
+			}
+			if err != nil {
+				return fmt.Errorf("failed to get device: %w", err)
 			}
 
-			out, err := json.MarshalIndent(device, "", "  ")
+			out, err := json.MarshalIndent(d, "", "  ")
 			if err != nil {
-				return fmt.Errorf("failed to marshal devices into JSON: %w", err)
+				return fmt.Errorf("failed to marshal JSON: %w", err)
 			}
 			fmt.Fprintln(os.Stdout, string(out))
 			return nil
 		},
 	}
 
-	command.Flags().Bool(
+	// ---------------- flags ----------------
+	cmd.Flags().BoolVar(
+		&showAll,
 		"all",
 		false,
-		"Include advanced fields such as ClientConnectivity, AdvertisedRoutes, and EnabledRoutes (equivalent to the API query '?fields=all'). Example: --all",
+		"Include advanced fields such as ClientConnectivity, AdvertisedRoutes, and EnabledRoutes (equivalent to '?fields=all').",
 	)
-
-	command.Flags().String(
+	cmd.Flags().StringVar(
+		&deviceID,
 		"device",
 		"",
-		`Device identifier to query. Accepts either the preferred nodeId ("node-abcdef123456") or the numeric legacy id ("123456"). Example: --device=node-abcdef123456`,
+		`Device identifier to query (nodeId "node-abcdef123456" or numeric id).`,
 	)
-	_ = command.MarkFlagRequired("device")
+	_ = cmd.MarkFlagRequired("device")
 
-	return command
+	return cmd
 }
+
