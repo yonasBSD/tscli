@@ -4,6 +4,7 @@ import (
 	"github.com/jaxxstorm/tscli/cmd/tscli/get/device"
 	"github.com/jaxxstorm/tscli/cmd/tscli/get/posture"
 	"github.com/jaxxstorm/tscli/cmd/tscli/get/policy"
+	"github.com/jaxxstorm/tscli/cmd/tscli/get/key"
 
 	"github.com/spf13/cobra"
 )
@@ -18,6 +19,7 @@ func Command() *cobra.Command {
 	command.AddCommand(device.Command())
 	command.AddCommand(posture.Command())
 	command.AddCommand(policy.Command())
+	command.AddCommand(key.Command())
 
 	return command
 }

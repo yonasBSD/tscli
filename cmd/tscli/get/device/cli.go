@@ -63,7 +63,6 @@ func Command() *cobra.Command {
 		},
 	}
 
-	// ---------------- flags ----------------
 	cmd.Flags().BoolVar(
 		&showAll,
 		"all",
