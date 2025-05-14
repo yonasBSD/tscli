@@ -52,7 +52,9 @@ func configureCLI() *cobra.Command {
 		set.Command(),
 	)
 
-	root.PersistentFlags().StringVarP(&apiKey, "api-key", "k", v.GetString("api-key"), "Tailscale API key")
+	root.PersistentFlags().StringVarP(&apiKey, "api-key", "k",
+		"",
+		"Tailscale API key")
 	root.PersistentFlags().StringVarP(&tailnet, "tailnet", "n", v.GetString("tailnet"), "Tailscale tailnet")
 
 	v.AutomaticEnv()
