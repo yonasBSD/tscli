@@ -1,7 +1,6 @@
-package get
+package list
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -13,9 +12,9 @@ import (
 
 func Command() *cobra.Command {
 	command := &cobra.Command{
-		Use:   "get",
-		Short: "Get device commands",
-		Long:  "Get commands that operate on devices",
+		Use:   "list",
+		Short: "List device commands",
+		Long:  "List commands that operate on device",
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			client, err := tscli.New()
@@ -29,26 +28,22 @@ func Command() *cobra.Command {
 				return fmt.Errorf("failed to get all flag: %w", err)
 			}
 
-			deviceID, err := cmd.Flags().GetString("device")
-			if err != nil {
-				return fmt.Errorf("failed to get device flag: %w", err)
-			}
-
-			var device *tsapi.Device
+			var devices []tsapi.Device
 
 			if all {
-				device, err = client.Devices().GetWithAllFields(context.Background(), deviceID)
+				devices, err = client.Devices().ListWithAllFields(cmd.Context())
 				if err != nil {
 					return fmt.Errorf("failed to list devices with all fields: %w", err)
 				}
 			} else {
-				device, err = client.Devices().Get(context.Background(), deviceID)
+
+				devices, err = client.Devices().List(cmd.Context())
 				if err != nil {
 					return fmt.Errorf("failed to list devices: %w", err)
 				}
 			}
 
-			out, err := json.MarshalIndent(device, "", "  ")
+			out, err := json.MarshalIndent(devices, "", "  ")
 			if err != nil {
 				return fmt.Errorf("failed to marshal devices into JSON: %w", err)
 			}
@@ -59,8 +54,6 @@ func Command() *cobra.Command {
 	}
 
 	command.Flags().Bool("all", false, "Display all fields in result.")
-	command.Flags().String("device", "", "Device ID to get.")
-	_ = command.MarkFlagRequired("device")
 
 	return command
 }

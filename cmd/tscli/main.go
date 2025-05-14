@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"github.com/jaxxstorm/tscli/cmd/tscli/devices"
+	"github.com/jaxxstorm/tscli/cmd/tscli/device"
 	viper "github.com/spf13/viper"
 
 	"github.com/jaxxstorm/tscli/pkg/contract"
@@ -26,7 +26,7 @@ func configureCLI() *cobra.Command {
 	}
 
 	rootCommand.AddCommand(
-		devices.Command())
+		device.Command())
 
 	rootCommand.PersistentFlags().StringVarP(&api_key, "api-key", "k", "", "Tailscale API key.")
 	rootCommand.PersistentFlags().StringVarP(&tailnet, "tailnet", "n", "-", "Tailscale tailnet.")

@@ -1,15 +1,15 @@
 # **tscli**
 
 `tscli` is a lightweight Go-based command-line tool for interacting with the [Tailscale API](https://tailscale.com/).
-It lets you list, inspect, and (de)-authorize devices in your tailnet from any machine that has Go installed.
+It lets you list, inspect, and (de)-authorize device in your tailnet from any machine that has Go installed.
 
 ---
 
 ## ✨ Features
 
-* **List** all devices in your tailnet (`devices list`)
-* **Get** full details for a single device (`devices get`)
-* **Authorize / De-authorize** a device (`devices authorize`)
+* **List** all device in your tailnet (`device list`)
+* **Get** full details for a single device (`device get`)
+* **Authorize / De-authorize** a device (`device authorize`)
 * Flag-overrides for showing **all API fields**
 * Works with **environment variables** or **flags** – whichever you prefer
 
@@ -61,9 +61,9 @@ tscli <command> [flags]
 
 | Command                   | Purpose                           | Key Flags                                                                              |
 | ------------------------- | --------------------------------- | -------------------------------------------------------------------------------------- |
-| `tscli devices list`      | List every device in the tailnet. | `--all`   Print **all** API fields instead of the default subset.                      |
-| `tscli devices get`       | Get one device by ID.             | `--device <id>` (✔)   Device ID to fetch.<br>`--all`   Show all fields.                |
-| `tscli devices authorize` | Approve / reject a device.        | `--device <id>` (✔)<br>`--approve` (default **true**; set `--approve=false` to reject) |
+| `tscli device list`      | List every device in the tailnet. | `--all`   Print **all** API fields instead of the default subset.                      |
+| `tscli device get`       | Get one device by ID.             | `--device <id>` (✔)   Device ID to fetch.<br>`--all`   Show all fields.                |
+| `tscli device authorize` | Approve / reject a device.        | `--device <id>` (✔)<br>`--approve` (default **true**; set `--approve=false` to reject) |
 
 > ✔ = required flag
 
@@ -71,40 +71,40 @@ tscli <command> [flags]
 
 ### Examples
 
-#### List devices (default view)
+#### List device (default view)
 
 ```bash
-tscli devices list
+tscli device list
 ```
 
-#### List devices with every field the API returns
+#### List device with every field the API returns
 
 ```bash
-tscli devices list --all
+tscli device list --all
 ```
 
 #### Get a single device
 
 ```bash
-tscli devices get --device 123456abcdef
+tscli device get --device 123456abcdef
 ```
 
 #### Approve a device
 
 ```bash
-tscli devices authorize --device 123456abcdef --approve
+tscli device authorize --device 123456abcdef --approve
 ```
 
 #### Un-approve (disable) a device
 
 ```bash
-tscli devices authorize --device 123456abcdef --approve=false
+tscli device authorize --device 123456abcdef --approve=false
 ```
 
 All commands print pretty-formatted JSON, making them easy to pipe into `jq`:
 
 ```bash
-tscli devices list | jq '.[] | {id, hostname, authorized}'
+tscli device list | jq '.[] | {id, hostname, authorized}'
 ```
 
 ---

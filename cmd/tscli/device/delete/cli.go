@@ -1,0 +1,50 @@
+package delete
+
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+
+	"github.com/jaxxstorm/tscli/pkg/tscli"
+	"github.com/spf13/cobra"
+
+)
+
+func Command() *cobra.Command {
+	command := &cobra.Command{
+		Use:   "delete",
+		Short: "Delete device commands",
+		Long:  "Delete commands that operate on device",
+		RunE: func(cmd *cobra.Command, args []string) error {
+
+			client, err := tscli.New()
+			if err != nil {
+				return fmt.Errorf("failed to create client: %w", err)
+			}
+
+			deviceID, err := cmd.Flags().GetString("device")
+			if err != nil {
+				return fmt.Errorf("failed to get device flag: %w", err)
+			}
+
+			if err := client.Devices().Delete(cmd.Context(), deviceID); err != nil {
+				return fmt.Errorf("failed to delete: %w", err)
+			}
+
+			payload := map[string]string{"result": fmt.Sprintf("device %s is deleted", deviceID)}
+
+			out, err := json.MarshalIndent(payload, "", "  ")
+			if err != nil {
+				return fmt.Errorf("failed to marshal payload into JSON: %w", err)
+			}
+			fmt.Fprintln(os.Stdout, string(out))
+			return nil
+
+		},
+	}
+
+	command.Flags().String("device", "", "Device ID to get.")
+	_ = command.MarkFlagRequired("device")
+
+	return command
+}
