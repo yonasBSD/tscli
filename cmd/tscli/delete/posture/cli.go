@@ -1,6 +1,6 @@
 // cmd/tscli/devices/delete/posture/command.go
 //
-// `tscli devices posture-delete --device <id> --key custom:attr`
+// `tscli devices posture --device <id> --key custom:attr`
 // Removes a custom posture attribute from a device.
 
 package posture
@@ -31,9 +31,6 @@ func Command() *cobra.Command {
 		Short: "Delete a posture attribute",
 		Long:  "Remove (unset) a custom:* posture attribute from the specified device.",
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-			if deviceID == "" {
-				return errors.New("--device is required")
-			}
 			if !keyRe.MatchString(attrKey) {
 				return errors.New(`--key must start with "custom:" and contain only letters, numbers, underscores or colons (≤ 50 chars)`)
 			}
