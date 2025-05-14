@@ -4,8 +4,11 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/jaxxstorm/tscli/cmd/tscli/delete"
+	"github.com/jaxxstorm/tscli/cmd/tscli/get"
+	"github.com/jaxxstorm/tscli/cmd/tscli/list"
+	"github.com/jaxxstorm/tscli/cmd/tscli/set"
 	"github.com/spf13/cobra"
-	"github.com/jaxxstorm/tscli/cmd/tscli/device"
 	viper "github.com/spf13/viper"
 
 	"github.com/jaxxstorm/tscli/pkg/contract"
@@ -26,7 +29,13 @@ func configureCLI() *cobra.Command {
 	}
 
 	rootCommand.AddCommand(
-		device.Command())
+		get.Command())
+	rootCommand.AddCommand(
+		list.Command())
+	rootCommand.AddCommand(
+		delete.Command())
+	rootCommand.AddCommand(
+		set.Command())
 
 	rootCommand.PersistentFlags().StringVarP(&api_key, "api-key", "k", "", "Tailscale API key.")
 	rootCommand.PersistentFlags().StringVarP(&tailnet, "tailnet", "n", "-", "Tailscale tailnet.")
@@ -40,14 +49,11 @@ func configureCLI() *cobra.Command {
 	viper.BindPFlag("api-key", rootCommand.PersistentFlags().Lookup("api-key"))
 	viper.BindPFlag("tailnet", rootCommand.PersistentFlags().Lookup("tailnet"))
 
-
 	return rootCommand
 }
 
 func main() {
 	rootCommand := configureCLI()
-
-	
 
 	if err := rootCommand.Execute(); err != nil {
 		contract.IgnoreIoError(fmt.Fprintf(os.Stderr, "%v\n", err))

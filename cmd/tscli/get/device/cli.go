@@ -1,4 +1,4 @@
-package get
+package device
 
 import (
 	"encoding/json"
@@ -12,9 +12,9 @@ import (
 
 func Command() *cobra.Command {
 	command := &cobra.Command{
-		Use:   "get",
+		Use:   "device",
 		Short: "Get device commands",
-		Long:  "Get commands that operate on device",
+		Long:  "Get a device's information from the Tailscale API",
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			client, err := tscli.New()
@@ -56,6 +56,7 @@ func Command() *cobra.Command {
 
 		},
 	}
+
 
 	command.Flags().Bool("all", false, "Display all fields in result.")
 	command.Flags().String("device", "", "Device ID to get.")

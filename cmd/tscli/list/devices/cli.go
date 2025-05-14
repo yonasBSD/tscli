@@ -1,4 +1,4 @@
-package list
+package devices
 
 import (
 	"encoding/json"
@@ -12,9 +12,9 @@ import (
 
 func Command() *cobra.Command {
 	command := &cobra.Command{
-		Use:   "list",
+		Use:   "devices",
 		Short: "List device commands",
-		Long:  "List commands that operate on device",
+		Long:  "List devices in the Tailscale API",
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			client, err := tscli.New()

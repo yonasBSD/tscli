@@ -1,4 +1,4 @@
-package delete
+package device
 
 import (
 	"encoding/json"
@@ -12,9 +12,9 @@ import (
 
 func Command() *cobra.Command {
 	command := &cobra.Command{
-		Use:   "delete",
+		Use:   "device",
 		Short: "Delete device commands",
-		Long:  "Delete commands that operate on device",
+		Long:  "Delete devices from the Tailscale API",
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			client, err := tscli.New()
