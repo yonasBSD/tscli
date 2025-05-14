@@ -1,17 +1,20 @@
 # **tscli**
 
-`tscli` is a lightweight Go-based command-line tool for interacting with the [Tailscale API](https://tailscale.com/).
-It lets you list, inspect, and (de)-authorize device in your tailnet from any machine that has Go installed.
+`tscli` is a fast, single-binary CLI for the [Tailscale HTTP API](https://tailscale.com/api).
+List, query, tag, retag, authorize, or expire devices; manage keys; inspect users; fetch your ACL policy file—straight from the terminal.
 
 ---
 
 ## ✨ Features
 
-* **List** all device in your tailnet (`device list`)
-* **Get** full details for a single device (`device get`)
-* **Authorize / De-authorize** a device (`device authorize`)
-* Flag-overrides for showing **all API fields**
-* Works with **environment variables** or **flags** – whichever you prefer
+| Area                  | What you can do                                                                                            |
+| --------------------- | ---------------------------------------------------------------------------------------------------------- |
+| **Devices**           | list, get, authorize / de-authorize, change name, set IPv4, enable routes, add / delete posture attributes |
+| **Keys**              | list reusable auth-keys, get a single key                                                                  |
+| **Users**             | list users (filter by type / role), get a single user                                                      |
+| **Policy file (ACL)** | fetch as raw HUJSON or canonical JSON                                                                      |
+| **Raw endpoints**     | helper for calling un-wrapped API paths                                                                    |
+| **Config precedence** | *flags* → *env vars* → `config.yaml` (local dir or `~/.tscli/`)                                            |
 
 ---
 
@@ -21,22 +24,22 @@ It lets you list, inspect, and (de)-authorize device in your tailnet from any ma
 go install github.com/jaxxstorm/tscli@latest
 ```
 
-The binary will appear in `$(go env GOPATH)/bin`.
+Binary goes to `$(go env GOPATH)/bin`.
 
 ---
 
 ## ⚙️ Configuration
 
-| Option            | Flag / Env Var                          | Required | Notes                                                              |
-| ----------------- | --------------------------------------- | -------- | ------------------------------------------------------------------ |
-| Tailscale API key | `--api-key`, `-k` / `TAILSCALE_API_KEY` | ✅        | [Generate a key](https://login.tailscale.com/admin/settings/keys). |
-| Tailnet name      | `--tailnet`, `-n` / `TAILSCALE_TAILNET` | ✅        | Looks like `example.com` or `corp.tailscale.net`.                  |
+| Option            | Flag / Env Var                          | Config key | Default |
+| ----------------- | --------------------------------------- | ---------- | ------- |
+| Tailscale API key | `--api-key`, `-k` / `TAILSCALE_API_KEY` | `api-key`  | ―       |
+| Tailnet name      | `--tailnet`, `-n` / `TAILSCALE_TAILNET` | `tailnet`  | `-`     |
 
-You can set them once as environment variables, pass them as flags every time, or mix and match—the CLI always uses **flags › env vars** precedence.
+`config.yaml` example:
 
-```bash
-export TAILSCALE_API_KEY=tskey-...
-export TAILSCALE_TAILNET=mycorp.com
+```yaml
+api-key: tskey-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+tailnet: example.com
 ```
 
 ---
@@ -44,92 +47,74 @@ export TAILSCALE_TAILNET=mycorp.com
 ## 🚀 Usage
 
 ```text
-tscli <command> [flags]
+tscli <noun> <verb> [flags]
 ```
 
-### Top-level flags
+### Global flags
 
 ```
--k, --api-key string   Tailscale API key.
--n, --tailnet string   Tailscale tailnet.
--h, --help             Help for any command.
+-k, --api-key string   Tailscale API key
+-n, --tailnet string   Tailnet name (default "-")
 ```
 
 ---
 
-## 📜 Command overview
+## 📜 Command map (selected)
 
-| Command                   | Purpose                           | Key Flags                                                                              |
-| ------------------------- | --------------------------------- | -------------------------------------------------------------------------------------- |
-| `tscli device list`      | List every device in the tailnet. | `--all`   Print **all** API fields instead of the default subset.                      |
-| `tscli device get`       | Get one device by ID.             | `--device <id>` (✔)   Device ID to fetch.<br>`--all`   Show all fields.                |
-| `tscli device authorize` | Approve / reject a device.        | `--device <id>` (✔)<br>`--approve` (default **true**; set `--approve=false` to reject) |
-
-> ✔ = required flag
+| Command                                                        | Purpose / Filters                               |                     |       |      |                                  |
+| -------------------------------------------------------------- | ----------------------------------------------- | ------------------- | ----- | ---- | -------------------------------- |
+| `tscli device list [--all]`                                    | List all devices (`--all` adds advanced fields) |                     |       |      |                                  |
+| `tscli device get --device <id> [--all]`                       | Get one device                                  |                     |       |      |                                  |
+| `tscli device authorize --device <id> [--approve=<bool>]`      | (De)authorize device                            |                     |       |      |                                  |
+| `tscli device name --device <id> --name <host>`                | Rename device                                   |                     |       |      |                                  |
+| `tscli device routes --device <id> --route <cidr> [--route …]` | Replace enabled subnet routes                   |                     |       |      |                                  |
+| `tscli device ip --device <id> --ip <addr>`                    | Force a Tailscale IPv4 address                  |                     |       |      |                                  |
+| `tscli device posture --device <id> --key custom:x --value 42` | Set posture attribute                           |                     |       |      |                                  |
+| `tscli delete attribute --device <id> --key custom:x`          | Delete posture attribute                        |                     |       |      |                                  |
+| `tscli list routes --device <id>`                              | Show advertised / enabled routes                |                     |       |      |                                  |
+| `tscli list keys`                                              | List auth-keys                                  |                     |       |      |                                  |
+| `tscli get key --key <id>`                                     | Get one auth-key                                |                     |       |      |                                  |
+| \`tscli list users \[--type member                             | shared                                          | all] \[--role owner | admin | …]\` | List users with optional filters |
+| `tscli get user --user <id>`                                   | Get one user                                    |                     |       |      |                                  |
+| `tscli get policy [--json]`                                    | Print ACL policy (HUJSON or JSON)               |                     |       |      |                                  |
 
 ---
 
 ### Examples
 
-#### List device (default view)
-
 ```bash
-tscli device list
-```
-
-#### List device with every field the API returns
-
-```bash
-tscli device list --all
-```
-
-#### Get a single device
-
-```bash
-tscli device get --device 123456abcdef
-```
-
-#### Approve a device
-
-```bash
-tscli device authorize --device 123456abcdef --approve
-```
-
-#### Un-approve (disable) a device
-
-```bash
-tscli device authorize --device 123456abcdef --approve=false
-```
-
-All commands print pretty-formatted JSON, making them easy to pipe into `jq`:
-
-```bash
+# List devices, pretty-print with jq
 tscli device list | jq '.[] | {id, hostname, authorized}'
+
+# Tag a device
+tscli set tags --device node-abc123 --tag tag:web --tag tag:prod
+
+# Rotate a device's IPv4
+tscli set ip --device node-abc123 --ip 100.64.0.42
+
+# Fetch ACL policy as JSON
+tscli get policy --json | jq '.groups'
 ```
 
 ---
 
 ## 🛠 Development
 
-1. Clone the repo and make sure you have Go 1.22+.
+```bash
+git clone https://github.com/jaxxstorm/tscli
+cd tscli
+TAILSCALE_API_KEY=tskey-... TAILSCALE_TAILNET=example.com \
+  go run ./cmd/tscli list devices
+```
 
-2. Run the CLI from source:
+Tests & lint:
 
-   ```bash
-   TAILSCALE_API_KEY=tskey-... \
-   TAILSCALE_TAILNET=mycorp.com \
-   go run ./cmd/tscli --help
-   ```
-
-3. Lint & test:
-
-   ```bash
-   make test      # or go test ./...
-   make lint      # runs your preferred linter
-   ```
+```bash
+go test ./...
+```
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT license (see `LICENSE` file).
+MIT (see `LICENSE`).
