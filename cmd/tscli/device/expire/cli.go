@@ -3,6 +3,7 @@
 package expire
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -29,7 +30,7 @@ func Command() *cobra.Command {
 			}
 
 			if _, err = tscli.Do(
-				cmd.Context(),
+				context.Background(),
 				client,
 				http.MethodPost,
 				"/device/"+deviceID+"/expire",
@@ -47,7 +48,7 @@ func Command() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().String("device", "", "Device ID to expire")
+	cmd.Flags().String("device", "", `Device ID whose key will be expired(nodeId "node-abc123" or numeric id). Example: --device=node-abcdef123456`,)
 	_ = cmd.MarkFlagRequired("device")
 	return cmd
 }

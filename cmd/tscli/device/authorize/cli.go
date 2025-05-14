@@ -54,7 +54,7 @@ func Command() *cobra.Command {
 	}
 
 	command.Flags().Bool("approve", true, "Approve (true) or reject (false) the device")
-	command.Flags().String("device", "", "Device ID to authorize")
+	command.Flags().String("device", "", `Device ID to authorize (nodeId "node-abc123" or numeric id). Example: --device=node-abcdef123456`)
 	_ = command.MarkFlagRequired("device")
 
 	return command

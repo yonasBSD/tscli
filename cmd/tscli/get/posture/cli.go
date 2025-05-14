@@ -42,7 +42,7 @@ func Command() *cobra.Command {
 		},
 	}
 
-	command.Flags().String("device", "", "Device ID to get.")
+	command.Flags().String("device", "", `Device ID to get (nodeId "node-abc123" or numeric id). Example: --device=node-abcdef123456`,)
 	_ = command.MarkFlagRequired("device")
 
 	return command
