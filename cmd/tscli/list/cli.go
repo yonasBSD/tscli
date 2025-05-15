@@ -7,6 +7,7 @@ import (
 	"github.com/jaxxstorm/tscli/cmd/tscli/list/routes"
 	"github.com/jaxxstorm/tscli/cmd/tscli/list/keys"
 	"github.com/jaxxstorm/tscli/cmd/tscli/list/users"
+	"github.com/jaxxstorm/tscli/cmd/tscli/list/invites"
 )
 
 func Command() *cobra.Command {
@@ -20,6 +21,7 @@ func Command() *cobra.Command {
 	command.AddCommand(routes.Command())
 	command.AddCommand(keys.Command())
 	command.AddCommand(users.Command())
+	command.AddCommand(invites.Command())
 
 
 

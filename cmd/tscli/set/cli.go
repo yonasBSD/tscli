@@ -5,6 +5,7 @@ import (
 	"github.com/jaxxstorm/tscli/cmd/tscli/set/posture"
 	"github.com/jaxxstorm/tscli/cmd/tscli/set/routes"
 	"github.com/jaxxstorm/tscli/cmd/tscli/set/tags"
+	"github.com/jaxxstorm/tscli/cmd/tscli/set/user"
 	"github.com/spf13/cobra"
 )
 
@@ -19,6 +20,7 @@ func Command() *cobra.Command {
 	command.AddCommand(routes.Command())
 	command.AddCommand(tags.Command())
 	command.AddCommand(ip.Command())
+	command.AddCommand(user.Command())
 
 	return command
 }
