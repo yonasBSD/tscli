@@ -4,6 +4,9 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/jaxxstorm/tscli/cmd/tscli/delete/device"
+	"github.com/jaxxstorm/tscli/cmd/tscli/delete/user"
+	"github.com/jaxxstorm/tscli/cmd/tscli/delete/webhook"
+	"github.com/jaxxstorm/tscli/cmd/tscli/delete/posture"	
 )
 
 func Command() *cobra.Command {
@@ -14,6 +17,9 @@ func Command() *cobra.Command {
 	}
 
 	command.AddCommand(device.Command())
+	command.AddCommand(user.Command())
+	command.AddCommand(webhook.Command())
+	command.AddCommand(posture.Command())
 
 
 	return command

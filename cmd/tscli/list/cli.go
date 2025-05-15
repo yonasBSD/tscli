@@ -8,6 +8,7 @@ import (
 	"github.com/jaxxstorm/tscli/cmd/tscli/list/keys"
 	"github.com/jaxxstorm/tscli/cmd/tscli/list/users"
 	"github.com/jaxxstorm/tscli/cmd/tscli/list/invites"
+	"github.com/jaxxstorm/tscli/cmd/tscli/list/webhooks"
 )
 
 func Command() *cobra.Command {
@@ -22,6 +23,7 @@ func Command() *cobra.Command {
 	command.AddCommand(keys.Command())
 	command.AddCommand(users.Command())
 	command.AddCommand(invites.Command())
+	command.AddCommand(webhooks.Command())
 
 
 
