@@ -9,6 +9,7 @@ import (
 	"github.com/jaxxstorm/tscli/cmd/tscli/list/users"
 	"github.com/jaxxstorm/tscli/cmd/tscli/list/invites"
 	"github.com/jaxxstorm/tscli/cmd/tscli/list/webhooks"
+	"github.com/jaxxstorm/tscli/cmd/tscli/list/integration"
 )
 
 func Command() *cobra.Command {
@@ -24,6 +25,7 @@ func Command() *cobra.Command {
 	command.AddCommand(users.Command())
 	command.AddCommand(invites.Command())
 	command.AddCommand(webhooks.Command())
+	command.AddCommand(postureintegration.Command())
 
 
 
