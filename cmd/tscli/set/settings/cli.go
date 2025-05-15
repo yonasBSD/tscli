@@ -10,6 +10,7 @@ import (
 
 	"github.com/jaxxstorm/tscli/pkg/tscli"
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 	tsapi "tailscale.com/client/tailscale/v2"
 )
 
@@ -29,13 +30,22 @@ func Command() *cobra.Command {
 		Use:   "settings",
 		Short: "Update tailnet settings",
 		PersistentPreRunE: func(cmd *cobra.Command, _ []string) error {
-			if f := cmd.Flags().Lookup("users-role-join"); f.Changed {
+			f := cmd.Flags()
+
+			// require at least one flag
+			changed := 0
+			f.Visit(func(_ *pflag.Flag) { changed++ })
+			if changed == 0 {
+				return fmt.Errorf("at least one setting flag must be provided")
+			}
+
+			if f.Lookup("users-role-join").Changed {
 				joinRole = strings.ToLower(joinRole)
 				if _, ok := validJoin[joinRole]; !ok {
 					return fmt.Errorf("invalid --users-role-join: %s (none|admin|member)", joinRole)
 				}
 			}
-			if f := cmd.Flags().Lookup("devices-key-duration"); f.Changed {
+			if f.Lookup("devices-key-duration").Changed {
 				if keyDays < 1 || keyDays > 180 {
 					return fmt.Errorf("--devices-key-duration must be 1-180")
 				}
@@ -67,7 +77,6 @@ func Command() *cobra.Command {
 				role := tsapi.RoleAllowedToJoinExternalTailnets(joinRole)
 				req.UsersRoleAllowedToJoinExternalTailnets = tsapi.PointerTo(role)
 			}
-
 			if f.Lookup("network-flow-logging").Changed {
 				req.NetworkFlowLoggingOn = tsapi.PointerTo(netLog)
 			}
