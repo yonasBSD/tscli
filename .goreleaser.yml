@@ -37,6 +37,7 @@ brews:
     commit_author:
       name:  GitHub Actions
       email: bot@leebriggs.co.uk
+    directory: Formula
     description: Interact with the Tailscale API from a CLI.
     homepage: https://github.com/jaxxstorm/tscli
 
