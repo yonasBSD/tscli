@@ -18,6 +18,7 @@ import (
 var (
 	apiKey  string
 	tailnet string
+	debug   bool
 )
 
 func configureCLI() *cobra.Command {
@@ -62,6 +63,9 @@ func configureCLI() *cobra.Command {
 	v.BindEnv("tailnet", "TAILSCALE_TAILNET")
 	v.BindPFlag("api-key", root.PersistentFlags().Lookup("api-key"))
 	v.BindPFlag("tailnet", root.PersistentFlags().Lookup("tailnet"))
+	root.PersistentFlags().BoolVarP(&debug, "debug", "d", false, "Dump HTTP requests/responses")
+	v.BindPFlag("debug", root.PersistentFlags().Lookup("debug"))
+	v.BindEnv("debug", "TSCLI_DEBUG")
 
 	return root
 }

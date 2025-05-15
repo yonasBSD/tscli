@@ -1,5 +1,10 @@
 // pkg/tscli/client.go
-
+//
+// Thin wrapper around tailscale-client-go that:
+//
+//   • picks up tailnet / api-key / debug from Viper  
+//   • logs every HTTP request & response when --debug or TSCLI_DEBUG=1 is set  
+//
 package tscli
 
 import (
@@ -9,7 +14,9 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/http/httputil"
 	"net/url"
+	"os"
 	"strings"
 
 	"github.com/spf13/viper"
@@ -21,52 +28,46 @@ const (
 	defaultContentType = "application/json"
 )
 
-// New returns a fully configured *tsapi.Client using flags / env from viper.
+
 func New() (*tsapi.Client, error) {
 	tailnet := viper.GetString("tailnet")
-	apiKey := viper.GetString("api-key")
-
-	switch {
-	case tailnet == "":
+	apiKey  := viper.GetString("api-key")
+	if tailnet == "" {
 		return nil, fmt.Errorf("tailnet is required")
-	case apiKey == "":
+	}
+	if apiKey == "" {
 		return nil, fmt.Errorf("api-key is required")
+	}
+
+	httpClient := &http.Client{}
+	if viper.GetBool("debug") {
+		httpClient.Transport = &logTransport{rt: http.DefaultTransport}
 	}
 
 	return &tsapi.Client{
 		Tailnet:   tailnet,
 		APIKey:    apiKey,
 		UserAgent: "tscli",
-		HTTP:      &http.Client{},
+		HTTP:      httpClient,
 	}, nil
 }
 
-// Do performs a raw HTTP call using an existing *tsapi.Client.
-//
-//   method – http.MethodGet / http.MethodPost / …
-//   path   – part _after_ “…/api/v2”; "{tailnet}" will be replaced & escaped.
-//   body   – JSON-serialisable value, []byte, string, or nil.
-//   out    – pointer to decode JSON response into, or nil if no body expected.
-//
-// It returns the response headers so callers can inspect rate-limit info, etc.
+// Do performs an HTTP call on top of an existing *tsapi.Client.  Useful for
+// endpoints not yet covered by the SDK.  When “debug” is on, full request /
+// response dumps are printed to stderr.
 func Do(
 	ctx context.Context,
 	c *tsapi.Client,
 	method, path string,
 	body any,
-	out any,
+	out   any,
 ) (http.Header, error) {
 
-	// -------- build URL ------------------------------------------------------
 	base := c.BaseURL
 	if base == nil {
-		var err error
-		base, err = url.Parse(defaultBaseURL)
-		if err != nil {
-			return nil, fmt.Errorf("parse base URL: %w", err)
-		}
+		b, _ := url.Parse(defaultBaseURL)
+		base = b
 	}
-
 	path = strings.ReplaceAll(path, "{tailnet}", url.PathEscape(c.Tailnet))
 	full := base.ResolveReference(&url.URL{Path: "/api/v2" + path})
 
@@ -90,7 +91,6 @@ func Do(
 	if err != nil {
 		return nil, err
 	}
-
 	req.Header.Set("User-Agent", c.UserAgent)
 	req.Header.Set("Accept", defaultContentType)
 	if body != nil {
@@ -98,6 +98,13 @@ func Do(
 	}
 	if c.APIKey != "" {
 		req.SetBasicAuth(c.APIKey, "")
+	}
+
+	// dump request information if debug is enabled
+	if viper.GetBool("debug") {
+		if dump, _ := httputil.DumpRequestOut(req, true); len(dump) > 0 {
+			os.Stderr.Write(dump)
+		}
 	}
 
 	httpc := c.HTTP
@@ -116,6 +123,17 @@ func Do(
 		return res.Header, err
 	}
 
+	// dump response information if debug is enabled
+	if viper.GetBool("debug") {
+		if dump, _ := httputil.DumpResponse(res, false); len(dump) > 0 {
+			os.Stderr.Write(dump)
+		}
+		if len(data) < 4_096 {
+			os.Stderr.Write(data)
+			fmt.Fprintln(os.Stderr)
+		}
+	}
+
 	if res.StatusCode < http.StatusOK || res.StatusCode >= http.StatusMultipleChoices {
 		return res.Header, fmt.Errorf(
 			"tailscale API %s %s -> %d: %s",
@@ -130,4 +148,21 @@ func Do(
 		return res.Header, fmt.Errorf("decode response: %w", err)
 	}
 	return res.Header, nil
+}
+
+
+type logTransport struct{ rt http.RoundTripper }
+
+func (t *logTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	if dump, _ := httputil.DumpRequestOut(req, true); len(dump) > 0 {
+		os.Stderr.Write(dump)
+	}
+	resp, err := t.rt.RoundTrip(req)
+	if err != nil {
+		return resp, err
+	}
+	if dump, _ := httputil.DumpResponse(resp, false); len(dump) > 0 {
+		os.Stderr.Write(dump)
+	}
+	return resp, nil
 }
