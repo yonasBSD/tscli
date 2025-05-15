@@ -2,7 +2,6 @@
 //
 // `tscli get posture-integration --id <integration-id>`
 // Fetch a single device-posture integration by its identifier.
-//
 package postureintegration
 
 import (

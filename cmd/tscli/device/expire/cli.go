@@ -48,7 +48,7 @@ func Command() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().String("device", "", `Device ID whose key will be expired(nodeId "node-abc123" or numeric id). Example: --device=node-abcdef123456`,)
+	cmd.Flags().String("device", "", `Device ID whose key will be expired(nodeId "node-abc123" or numeric id). Example: --device=node-abcdef123456`)
 	_ = cmd.MarkFlagRequired("device")
 	return cmd
 }

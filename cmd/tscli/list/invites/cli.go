@@ -1,9 +1,9 @@
 package invites
 
 import (
-	"github.com/spf13/cobra"
-	"github.com/jaxxstorm/tscli/cmd/tscli/list/invites/user"
 	"github.com/jaxxstorm/tscli/cmd/tscli/list/invites/device"
+	"github.com/jaxxstorm/tscli/cmd/tscli/list/invites/user"
+	"github.com/spf13/cobra"
 )
 
 func Command() *cobra.Command {

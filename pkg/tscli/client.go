@@ -2,9 +2,8 @@
 //
 // Thin wrapper around tailscale-client-go that:
 //
-//   • picks up tailnet / api-key / debug from Viper  
-//   • logs every HTTP request & response when --debug or TSCLI_DEBUG=1 is set  
-//
+//   - picks up tailnet / api-key / debug from Viper
+//   - logs every HTTP request & response when --debug or TSCLI_DEBUG=1 is set
 package tscli
 
 import (
@@ -28,10 +27,9 @@ const (
 	defaultContentType = "application/json"
 )
 
-
 func New() (*tsapi.Client, error) {
 	tailnet := viper.GetString("tailnet")
-	apiKey  := viper.GetString("api-key")
+	apiKey := viper.GetString("api-key")
 	if tailnet == "" {
 		return nil, fmt.Errorf("tailnet is required")
 	}
@@ -60,7 +58,7 @@ func Do(
 	c *tsapi.Client,
 	method, path string,
 	body any,
-	out   any,
+	out any,
 ) (http.Header, error) {
 
 	base := c.BaseURL
@@ -149,7 +147,6 @@ func Do(
 	}
 	return res.Header, nil
 }
-
 
 type logTransport struct{ rt http.RoundTripper }
 

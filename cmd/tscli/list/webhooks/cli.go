@@ -1,4 +1,4 @@
-//cmd/tscli/list/webhooks/cli.go
+// cmd/tscli/list/webhooks/cli.go
 package webhooks
 
 import (

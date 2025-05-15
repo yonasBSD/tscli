@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/jaxxstorm/tscli/cmd/tscli/create"
 	"github.com/jaxxstorm/tscli/cmd/tscli/delete"
 	"github.com/jaxxstorm/tscli/cmd/tscli/get"
 	"github.com/jaxxstorm/tscli/cmd/tscli/list"
@@ -51,6 +52,7 @@ func configureCLI() *cobra.Command {
 		list.Command(),
 		delete.Command(),
 		set.Command(),
+		create.Command(),
 	)
 
 	root.PersistentFlags().StringVarP(&apiKey, "api-key", "k",

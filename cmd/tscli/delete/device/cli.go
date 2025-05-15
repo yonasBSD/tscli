@@ -7,7 +7,6 @@ import (
 
 	"github.com/jaxxstorm/tscli/pkg/tscli"
 	"github.com/spf13/cobra"
-
 )
 
 func Command() *cobra.Command {
@@ -43,7 +42,7 @@ func Command() *cobra.Command {
 		},
 	}
 
-	command.Flags().String("device", "", `Device ID to get (nodeId "node-abc123" or numeric id). Example: --device=node-abcdef123456`,)
+	command.Flags().String("device", "", `Device ID to get (nodeId "node-abc123" or numeric id). Example: --device=node-abcdef123456`)
 	_ = command.MarkFlagRequired("device")
 
 	return command

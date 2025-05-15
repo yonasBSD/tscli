@@ -5,8 +5,7 @@
 //
 // Example:
 //
-//   tscli list routes --device node-abcdef123456
-//
+//	tscli list routes --device node-abcdef123456
 package routes
 
 import (

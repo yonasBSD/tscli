@@ -4,12 +4,11 @@
 //
 // Examples
 //
-//   # Standard fields
-//   tscli get device --device node-abcdef123456
+//	# Standard fields
+//	tscli get device --device node-abcdef123456
 //
-//   # Every field the API can return
-//   tscli get device --device node-abcdef123456 --all
-//
+//	# Every field the API can return
+//	tscli get device --device node-abcdef123456 --all
 package device
 
 import (
@@ -79,4 +78,3 @@ func Command() *cobra.Command {
 
 	return cmd
 }
-
