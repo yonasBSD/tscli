@@ -1,44 +1,82 @@
 # **tscli**
 
 `tscli` is a fast, single-binary CLI for the [Tailscale HTTP API](https://tailscale.com/api).
-List, query, tag, retag, authorize, or expire devices; manage keys; inspect users; fetch your ACL policy file—straight from the terminal.
+From your terminal you can manage devices, users, auth keys, webhooks, posture integrations, tailnet-wide settings, and even hit raw endpoints when the SDK hasn’t caught up yet.
 
 ---
 
-## ✨ Features
+## ✨ Highlights
 
-| Area                  | What you can do                                                                                            |
-| --------------------- | ---------------------------------------------------------------------------------------------------------- |
-| **Devices**           | list, get, authorize / de-authorize, change name, set IPv4, enable routes, add / delete posture attributes |
-| **Keys**              | list reusable auth-keys, get a single key                                                                  |
-| **Users**             | list users (filter by type / role), get a single user                                                      |
-| **Policy file (ACL)** | fetch as raw HUJSON or canonical JSON                                                                      |
-| **Raw endpoints**     | helper for calling un-wrapped API paths                                                                    |
-| **Config precedence** | *flags* → *env vars* → `config.yaml` (local dir or `~/.tscli/`)                                            |
+| Area                     | What you can do                                                                                             |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| **Devices**              | List, get, (de)authorize, rename, force IPv4, enable subnet routes, expire, set / delete posture attributes |
+| **Keys**                 | List & get existing keys; create **auth-keys** *or* **OAuth clients** (with full scope/tag validation)      |
+| **Users**                | List (filter by type / role), get, suspend / restore / approve, manage invites                              |
+| **Tailnet settings**     | Get & patch booleans + key-expiry with a single command (`tscli set settings …`)                            |
+| **Policy file (ACL)**    | Fetch as raw HUJSON **or** canonical JSON                                                                   |
+| **Webhooks**             | List, get, delete, **create** (generic / Slack) with subscription & provider validation                     |
+| **Posture integrations** | List, get, create, patch existing integrations                                                              |
+| **Invites**              | List / delete device- or user-invites                                                                       |
+| **Contacts**             | Get & update contact emails                                                                                 |
+| **Debug switch**         | `--debug` or `TSCLI_DEBUG=1` prints full HTTP requests / responses to stderr                                |
+| **Config precedence**    | *flags* → *env* → `~/.tscli/.tscli.yaml` (or local `./.tscli.yaml`)                                         |
 
 ---
 
-## 🔧 Installation
+## 🔧 Install
+
+### 🔧 Installation
+
+#### macOS / Linux (Homebrew)
+
+```bash
+brew tap jaxxstorm/tap
+brew install tscli          # upgrades via ‘brew upgrade’
+```
+
+#### Windows (Scoop)
+
+```powershell
+scoop bucket add jaxxstorm https://github.com/jaxxstorm/scoop-bucket.git
+scoop install tscli
+```
+
+#### Manual download
+
+Pre-built archives for **macOS, Linux, Windows (x86-64 / arm64)** are published on every release:
+
+```bash
+# example for Linux amd64
+curl -sSfL \
+  https://github.com/jaxxstorm/tscli/releases/latest/download/tscli_$(uname -s)_$(uname -m).tar.gz \
+  | sudo tar -xz -C /usr/local/bin tscli
+```
+
+#### Go install (always builds from HEAD)
 
 ```bash
 go install github.com/jaxxstorm/tscli@latest
 ```
 
-Binary goes to `$(go env GOPATH)/bin`.
+After any method, confirm:
+
+```bash
+tscli --version
+```
+
 
 ---
 
 ## ⚙️ Configuration
 
-| Option            | Flag / Env Var                          | Config key | Default |
-| ----------------- | --------------------------------------- | ---------- | ------- |
-| Tailscale API key | `--api-key`, `-k` / `TAILSCALE_API_KEY` | `api-key`  | ―       |
-| Tailnet name      | `--tailnet`, `-n` / `TAILSCALE_TAILNET` | `tailnet`  | `-`     |
-
-`config.yaml` example:
+| Option            | Flag / Env var                          | YAML key  | Default |
+| ----------------- | --------------------------------------- | --------- | ------- |
+| Tailscale API key | `--api-key`, `-k` / `TAILSCALE_API_KEY` | `api-key` | —       |
+| Tailnet name      | `--tailnet`, `-n` / `TAILSCALE_TAILNET` | `tailnet` | `-`     |
 
 ```yaml
-api-key: tskey-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+# ~/.tscli/.tscli.yaml
+api-key: tskey-abc123…
 tailnet: example.com
 ```
 
@@ -54,46 +92,67 @@ tscli <noun> <verb> [flags]
 
 ```
 -k, --api-key string   Tailscale API key
--n, --tailnet string   Tailnet name (default "-")
+-n, --tailnet string   Tailnet (default "-")
+-d, --debug            Dump raw HTTP traffic to stderr
 ```
 
 ---
 
-## 📜 Command map (selected)
+## 📜 Command cheat-sheet (most common)
 
-| Command                                                        | Purpose / Filters                               |                     |       |      |                                  |
-| -------------------------------------------------------------- | ----------------------------------------------- | ------------------- | ----- | ---- | -------------------------------- |
-| `tscli device list [--all]`                                    | List all devices (`--all` adds advanced fields) |                     |       |      |                                  |
-| `tscli device get --device <id> [--all]`                       | Get one device                                  |                     |       |      |                                  |
-| `tscli device authorize --device <id> [--approve=<bool>]`      | (De)authorize device                            |                     |       |      |                                  |
-| `tscli device name --device <id> --name <host>`                | Rename device                                   |                     |       |      |                                  |
-| `tscli device routes --device <id> --route <cidr> [--route …]` | Replace enabled subnet routes                   |                     |       |      |                                  |
-| `tscli device ip --device <id> --ip <addr>`                    | Force a Tailscale IPv4 address                  |                     |       |      |                                  |
-| `tscli device posture --device <id> --key custom:x --value 42` | Set posture attribute                           |                     |       |      |                                  |
-| `tscli delete attribute --device <id> --key custom:x`          | Delete posture attribute                        |                     |       |      |                                  |
-| `tscli list routes --device <id>`                              | Show advertised / enabled routes                |                     |       |      |                                  |
-| `tscli list keys`                                              | List auth-keys                                  |                     |       |      |                                  |
-| `tscli get key --key <id>`                                     | Get one auth-key                                |                     |       |      |                                  |
-| \`tscli list users \[--type member                             | shared                                          | all] \[--role owner | admin | …]\` | List users with optional filters |
-| `tscli get user --user <id>`                                   | Get one user                                    |                     |       |      |                                  |
-| `tscli get policy [--json]`                                    | Print ACL policy (HUJSON or JSON)               |                     |       |      |                                  |
+| Command                                                                                                                   | Purpose / Notes                                           |                                                           |                              |                  |
+| ------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- | --------------------------------------------------------- | ---------------------------- | ---------------- |
+| **Devices**                                                                                                               |                                                           |                                                           |                              |                  |
+| `tscli device list [--all]`                                                                                               | List devices (add `--all` for connectivity & routes)      |                                                           |                              |                  |
+| `tscli device get  --device <id> [--all]`                                                                                 | Fetch one                                                 |                                                           |                              |                  |
+| `tscli device authorize   --device <id> [--approve=<bool>]`                                                               | Approve / un-approve                                      |                                                           |                              |                  |
+| `tscli device name        --device <id> --name <hostname>`                                                                | Rename                                                    |                                                           |                              |                  |
+| `tscli device routes      --device <id> --routes 10.0.0.0/24,…`                                                           | Replace enabled subnet routes                             |                                                           |                              |                  |
+| `tscli device ip          --device <id> --ip 100.64.0.42`                                                                 | Force IPv4                                                |                                                           |                              |                  |
+| `tscli device expire      --device <id>`                                                                                  | Immediately expire node key                               |                                                           |                              |                  |
+| `tscli set attribute      --device <id> --key custom:x --value 1`                                                         | Add / update posture attribute                            |                                                           |                              |                  |
+| `tscli delete attribute   --device <id> --key custom:x`                                                                   | Delete posture attribute                                  |                                                           |                              |                  |
+| **Keys**                                                                                                                  |                                                           |                                                           |                              |                  |
+| `tscli list keys`                                                                                                         | List existing keys                                        |                                                           |                              |                  |
+| `tscli get  key  --key <id>`                                                                                              | Show one                                                  |                                                           |                              |                  |
+| \`tscli create key \[authkey                                                                                              | oauthclient …]\`                                          | Create auth-key or OAuth client (validates scopes & tags) |                              |                  |
+| **Users & invites**                                                                                                       |                                                           |                                                           |                              |                  |
+| \`tscli list users \[--type member                                                                                        | shared                                                    | all] \[--role admin                                       | …]\`                         | Filtered listing |
+| `tscli get  user --user <id>`                                                                                             | Details                                                   |                                                           |                              |                  |
+| \`tscli set user-access  --user <id> --suspend                                                                            | --restore                                                 | --approve\`                                               | Change approval / suspension |                  |
+| \`tscli list invites user   \[--state pending                                                                             | accepted                                                  | all]\`                                                    | User invites                 |                  |
+| `tscli list invites device --device <id>`                                                                                 | Device invites                                            |                                                           |                              |                  |
+| **Policy & settings**                                                                                                     |                                                           |                                                           |                              |                  |
+| `tscli get policy [--json]`                                                                                               | Pretty HUJSON (default) or JSON ACL policy                |                                                           |                              |                  |
+| `tscli get settings`                                                                                                      | Current tailnet-wide toggles                              |                                                           |                              |                  |
+| `tscli set settings --devices-approval=true …`                                                                            | Patch any subset of settings (requires at least one flag) |                                                           |                              |                  |
+| **Webhooks**                                                                                                              |                                                           |                                                           |                              |                  |
+| `tscli list webhooks`                                                                                                     | List                                                      |                                                           |                              |                  |
+| `tscli get  webhook --id <id>`                                                                                            | Show                                                      |                                                           |                              |                  |
+| `tscli delete webhook --id <id>`                                                                                          | Delete                                                    |                                                           |                              |                  |
+| `tscli create webhook --url <https://…> --provider generic \`<br>`--subscription nodeCreated --subscription policyUpdate` | Create with provider + events                             |                                                           |                              |                  |
+| **Posture integrations**                                                                                                  |                                                           |                                                           |                              |                  |
+| `tscli list  posture-integrations`                                                                                        | List integrations                                         |                                                           |                              |                  |
+| `tscli get   posture-integration --id <id>`                                                                               | Get one                                                   |                                                           |                              |                  |
+| `tscli create posture-integration --provider falcon --cloud-id us-1 --client-secret …`                                    | Create new                                                |                                                           |                              |                  |
+| `tscli set    posture-integration --id <id> --provider jamfpro --client-id XXX`                                           | Patch existing                                            |                                                           |                              |                  |
 
 ---
 
-### Examples
+### Quick examples
 
 ```bash
-# List devices, pretty-print with jq
-tscli device list | jq '.[] | {id, hostname, authorized}'
+# Approve a waiting device
+tscli device authorize --device node-abc123 --approve
 
-# Tag a device
-tscli set tags --device node-abc123 --tag tag:web --tag tag:prod
+# Rotate an auth-key that expires in 30 days
+tscli create key --description "CI" --expiry 720h | jq .key
 
-# Rotate a device's IPv4
-tscli set ip --device node-abc123 --ip 100.64.0.42
-
-# Fetch ACL policy as JSON
-tscli get policy --json | jq '.groups'
+# Create Slack webhook for device deletions
+tscli create webhook \
+  --url https://hooks.slack.com/services/T000/B000/XXXXX \
+  --provider slack \
+  --subscription nodeDeleted
 ```
 
 ---
@@ -103,8 +162,7 @@ tscli get policy --json | jq '.groups'
 ```bash
 git clone https://github.com/jaxxstorm/tscli
 cd tscli
-TAILSCALE_API_KEY=tskey-... TAILSCALE_TAILNET=example.com \
-  go run ./cmd/tscli list devices
+TAILSCALE_API_KEY=tskey-… TAILSCALE_TAILNET=example.com go run ./cmd/tscli list devices
 ```
 
 Tests & lint:
@@ -117,4 +175,4 @@ go test ./...
 
 ## 📄 License
 
-MIT (see `LICENSE`).
+MIT — see `LICENSE`.

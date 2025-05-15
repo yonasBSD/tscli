@@ -11,6 +11,7 @@ import (
 	"github.com/jaxxstorm/tscli/cmd/tscli/get"
 	"github.com/jaxxstorm/tscli/cmd/tscli/list"
 	"github.com/jaxxstorm/tscli/cmd/tscli/set"
+	"github.com/jaxxstorm/tscli/cmd/tscli/version"
 	"github.com/jaxxstorm/tscli/pkg/contract"
 	"github.com/spf13/cobra"
 	viper "github.com/spf13/viper"
@@ -53,6 +54,7 @@ func configureCLI() *cobra.Command {
 		delete.Command(),
 		set.Command(),
 		create.Command(),
+		version.Command(),
 	)
 
 	root.PersistentFlags().StringVarP(&apiKey, "api-key", "k",
