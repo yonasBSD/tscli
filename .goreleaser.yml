@@ -1,7 +1,4 @@
-# .goreleaser.yaml
-version: 1
-
-project_name: tscli
+version: 2
 
 before:
   hooks:
@@ -9,10 +6,11 @@ before:
 
 builds:
   - id: tscli
-    main: ./cmd/tscli          # entrypoint
-    goos: [linux, darwin, windows]
+    main: ./cmd/tscli
+    goos:   [linux, darwin, windows]
     goarch: [amd64, arm64]
-    ldflags: -X github.com/jaxxstorm/tscli/pkg/version.Version={{.Version}}
+    ldflags:
+      - -X github.com/jaxxstorm/tscli/pkg/version.Version={{.Version}}
 
 archives:
   - id: default
@@ -40,8 +38,8 @@ brews:
     commit_author:
       name: GitHub Actions
       email: bot@leebriggs.co.uk
-    description: "Interact with the Tailscale API from a CLI."
-    homepage: "https://github.com/jaxxstorm/tscli"
+    description: Interact with the Tailscale API from a CLI.
+    homepage: https://github.com/jaxxstorm/tscli
 
 scoop:
   - name: tscli
@@ -51,5 +49,5 @@ scoop:
     commit_author:
       name: GitHub Actions
       email: bot@leebriggs.co.uk
-    description: "Interact with the Tailscale API from a CLI."
-    homepage: "https://github.com/jaxxstorm/tscli"
+    description: Interact with the Tailscale API from a CLI.
+    homepage: https://github.com/jaxxstorm/tscl
