@@ -10,15 +10,14 @@ builds:
     goos:   [linux, darwin, windows]
     goarch: [amd64, arm64]
     ldflags:
-      - -X github.com/jaxxstorm/tscli/pkg/version.Version={{.Version}}
+      - -X github.com/jaxxstorm/tscli/pkg/version.Version={{ .Version }}
 
 archives:
   - id: default
     builds: [tscli]
     format: tar.gz
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
-    files:
-      - LICENSE*
+    files: [LICENSE*]
     format_overrides:
       - goos: windows
         format: zip
@@ -32,22 +31,22 @@ changelog:
 
 brews:
   - name: tscli
-    tap:
+    repository:
       owner: jaxxstorm
       name: homebrew-tap
     commit_author:
-      name: GitHub Actions
+      name:  GitHub Actions
       email: bot@leebriggs.co.uk
     description: Interact with the Tailscale API from a CLI.
     homepage: https://github.com/jaxxstorm/tscli
 
-scoop:
+scoops:
   - name: tscli
-    bucket:
+    repository:
       owner: jaxxstorm
       name: scoop-bucket
     commit_author:
-      name: GitHub Actions
+      name:  GitHub Actions
       email: bot@leebriggs.co.uk
     description: Interact with the Tailscale API from a CLI.
-    homepage: https://github.com/jaxxstorm/tscl
+    homepage: https://github.com/jaxxstorm/tscli
