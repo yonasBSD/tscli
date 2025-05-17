@@ -2,16 +2,13 @@
 package policyset
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"os"
-	"strings"
 
+	f "github.com/jaxxstorm/tscli/pkg/file"
 	"github.com/jaxxstorm/tscli/pkg/tscli"
 	"github.com/spf13/cobra"
-	"github.com/tailscale/hujson"
 )
 
 func Command() *cobra.Command {
@@ -42,12 +39,12 @@ func Command() *cobra.Command {
 		},
 
 		RunE: func(cmd *cobra.Command, _ []string) error {
-			raw, err := readInput(filePath, inline)
+			raw, err := f.ReadInput(filePath, inline)
 			if err != nil {
 				return err
 			}
 
-			if err := validateJSONorHUJSON(raw); err != nil {
+			if err := f.ValidatePolicy(raw); err != nil {
 				return fmt.Errorf("invalid ACL: %w", err)
 			}
 
@@ -70,30 +67,8 @@ func Command() *cobra.Command {
 	}
 
 	cmd.Flags().StringVar(&filePath, "file", "", "file://path, local path, or '-' for stdin")
-	cmd.Flags().StringVar(&inline,   "body", "", "Raw ACL JSON/HuJSON string")
-	cmd.Flags().StringVar(&ifMatch,  "if-match", "", "Value for If-Match header (etag or ts-default)")
+	cmd.Flags().StringVar(&inline, "body", "", "Raw ACL JSON/HuJSON string")
+	cmd.Flags().StringVar(&ifMatch, "if-match", "", "Value for If-Match header (etag or ts-default)")
 
 	return cmd
-}
-
-func readInput(path, inline string) ([]byte, error) {
-	if inline != "" {
-		return []byte(inline), nil
-	}
-
-	if path == "-" {
-		return io.ReadAll(os.Stdin)
-	}
-	if strings.HasPrefix(path, "file://") {
-		path = strings.TrimPrefix(path, "file://")
-	}
-	return os.ReadFile(path)
-}
-
-func validateJSONorHUJSON(b []byte) error {
-	if json.Valid(b) {
-		return nil
-	}
-	_, err := hujson.Parse(b)
-	return err
 }
