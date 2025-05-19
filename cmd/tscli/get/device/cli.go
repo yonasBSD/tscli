@@ -21,6 +21,8 @@ import (
 	tsapi "tailscale.com/client/tailscale/v2"
 )
 
+var newClient = tscli.New
+
 func Command() *cobra.Command {
 	var (
 		showAll  bool
@@ -38,7 +40,8 @@ func Command() *cobra.Command {
 			return nil
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := tscli.New()
+
+			client, err := newClient()
 			if err != nil {
 				return fmt.Errorf("failed to create client: %w", err)
 			}
