@@ -98,44 +98,70 @@ tscli <noun> <verb> [flags]
 
 ---
 
-## 📜 Command cheat-sheet (most common)
+## 📜 Coverage
 
-| Command                                                                                                                   | Purpose / Notes                                           |                                                           |                              |                  |
-| ------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- | --------------------------------------------------------- | ---------------------------- | ---------------- |
-| **Devices**                                                                                                               |                                                           |                                                           |                              |                  |
-| `tscli device list [--all]`                                                                                               | List devices (add `--all` for connectivity & routes)      |                                                           |                              |                  |
-| `tscli device get  --device <id> [--all]`                                                                                 | Fetch one                                                 |                                                           |                              |                  |
-| `tscli device authorize   --device <id> [--approve=<bool>]`                                                               | Approve / un-approve                                      |                                                           |                              |                  |
-| `tscli device name        --device <id> --name <hostname>`                                                                | Rename                                                    |                                                           |                              |                  |
-| `tscli device routes      --device <id> --routes 10.0.0.0/24,…`                                                           | Replace enabled subnet routes                             |                                                           |                              |                  |
-| `tscli device ip          --device <id> --ip 100.64.0.42`                                                                 | Force IPv4                                                |                                                           |                              |                  |
-| `tscli device expire      --device <id>`                                                                                  | Immediately expire node key                               |                                                           |                              |                  |
-| `tscli set attribute      --device <id> --key custom:x --value 1`                                                         | Add / update posture attribute                            |                                                           |                              |                  |
-| `tscli delete attribute   --device <id> --key custom:x`                                                                   | Delete posture attribute                                  |                                                           |                              |                  |
-| **Keys**                                                                                                                  |                                                           |                                                           |                              |                  |
-| `tscli list keys`                                                                                                         | List existing keys                                        |                                                           |                              |                  |
-| `tscli get  key  --key <id>`                                                                                              | Show one                                                  |                                                           |                              |                  |
-| \`tscli create key \[authkey                                                                                              | oauthclient …]\`                                          | Create auth-key or OAuth client (validates scopes & tags) |                              |                  |
-| **Users & invites**                                                                                                       |                                                           |                                                           |                              |                  |
-| \`tscli list users \[--type member                                                                                        | shared                                                    | all] \[--role admin                                       | …]\`                         | Filtered listing |
-| `tscli get  user --user <id>`                                                                                             | Details                                                   |                                                           |                              |                  |
-| \`tscli set user-access  --user <id> --suspend                                                                            | --restore                                                 | --approve\`                                               | Change approval / suspension |                  |
-| \`tscli list invites user   \[--state pending                                                                             | accepted                                                  | all]\`                                                    | User invites                 |                  |
-| `tscli list invites device --device <id>`                                                                                 | Device invites                                            |                                                           |                              |                  |
-| **Policy & settings**                                                                                                     |                                                           |                                                           |                              |                  |
-| `tscli get policy [--json]`                                                                                               | Pretty HUJSON (default) or JSON ACL policy                |                                                           |                              |                  |
-| `tscli get settings`                                                                                                      | Current tailnet-wide toggles                              |                                                           |                              |                  |
-| `tscli set settings --devices-approval=true …`                                                                            | Patch any subset of settings (requires at least one flag) |                                                           |                              |                  |
-| **Webhooks**                                                                                                              |                                                           |                                                           |                              |                  |
-| `tscli list webhooks`                                                                                                     | List                                                      |                                                           |                              |                  |
-| `tscli get  webhook --id <id>`                                                                                            | Show                                                      |                                                           |                              |                  |
-| `tscli delete webhook --id <id>`                                                                                          | Delete                                                    |                                                           |                              |                  |
-| `tscli create webhook --url <https://…> --provider generic \`<br>`--subscription nodeCreated --subscription policyUpdate` | Create with provider + events                             |                                                           |                              |                  |
-| **Posture integrations**                                                                                                  |                                                           |                                                           |                              |                  |
-| `tscli list  posture-integrations`                                                                                        | List integrations                                         |                                                           |                              |                  |
-| `tscli get   posture-integration --id <id>`                                                                               | Get one                                                   |                                                           |                              |                  |
-| `tscli create posture-integration --provider falcon --cloud-id us-1 --client-secret …`                                    | Create new                                                |                                                           |                              |                  |
-| `tscli set    posture-integration --id <id> --provider jamfpro --client-id XXX`                                           | Patch existing                                            |                                                           |                              |                  |
+| API area / action                |     Status    | `tscli` command                                             |
+| -------------------------------- | :-----------: | ----------------------------------------------------------- |
+| **Devices**                      |               |                                                             |
+| list devices                     |  **complete** | `device list`                                               |
+| get device                       |  **complete** | `device get --device <id>`                                  |
+| authorize / de-authorize device  |  **complete** | `device authorize --device <id> [--approve=<bool>]`         |
+| expire device key                |  **complete** | `device expire --device <id>`                               |
+| set device name                  |  **complete** | `set name --device <id> --name <host>`                      |
+| set device tags                  |  **complete** | `set tags --device <id> --tag <tag>`                        |
+| set device IPv4                  |  **complete** | `set ip --device <id> --ip <addr>`                          |
+| list subnet routes               |  **complete** | `list routes --device <id>`                                 |
+| set subnet routes                |  **complete** | `set routes --device <id> --route <cidr> …`                 |
+| **delete device**                |  **complete** | `delete device --device <id>`                               |
+| **Device-posture attributes**    |               |                                                             |
+| get attributes                   |  **complete** | `get posture --device <id>`                                 |
+| set attribute                    |  **complete** | `set attribute --device <id> --key custom:x --value 42`     |
+| delete attribute                 |  **complete** | `delete attribute --device <id> --key custom:x`             |
+| **Posture integrations**         |               |                                                             |
+| list integrations                |  **complete** | `list posture-integrations`                                 |
+| get integration                  |  **complete** | `get posture-integration --id <id>`                         |
+| create integration               |  **complete** | `create posture-integration --provider …`                   |
+| update integration               |  **complete** | `set posture-integration --id <id> …`                       |
+| delete integration               |  *incomplete* | —                                                           |
+| **Auth / OAuth keys**            |               |                                                             |
+| list keys                        |  **complete** | `list keys`                                                 |
+| get key                          |  **complete** | `get key --key <id>`                                        |
+| create auth-key                  |  **complete** | `create key --type authkey …`                               |
+| create OAuth client              |  **complete** | `create key --type oauthclient …`                           |
+| delete / revoke key              |  *incomplete* | —                                                           |
+| **Users**                        |               |                                                             |
+| list users                       |  **complete** | `list users [--type …] [--role …]`                          |
+| get user                         |  **complete** | `get user --user <id>`                                      |
+| approve / suspend / restore user |  **complete** | `set user-access --user <id> --approve/--suspend/--restore` |
+| delete user                      |  **complete** | `delete user --user <id>`                                   |
+| **Invites**                      |               |                                                             |
+| list user invites                |  **complete** | `list invites user [--state …]`                             |
+| list device invites              |  **complete** | `list invites device --device <id>`                         |
+| delete invite                    |  *incomplete* | —                                                           |
+| get invite                       |  *incomplete* | —                                                           |
+| **Contacts**                     |               |                                                             |
+| update contact                   |  **complete** | `set contacts --contact <id> --email <e@x>`                 |
+| list / create / delete contacts  |  *incomplete* | —                                                           |
+| **DNS**                          |               |                                                             |
+| list nameservers                 |  **complete** | `list nameservers`                                          |
+| set nameservers                  |  **complete** | `set nameservers --nameserver <ip> …`                       |
+| advanced DNS settings            |  *incomplete* | —                                                           |
+| **Policy file (ACL)**            |               |                                                             |
+| get policy file                  |  **complete** | `get policy [--json]`                                       |
+| set policy file                  |  **complete** | `set policy --file <acl.hujson>`                            |
+| preview rule matches             |  **complete** | `get policy-preview --type … --value … [--file]`            |
+| policy history / tests           |  *incomplete* | —                                                           |
+| **Tailnet settings**             |               |                                                             |
+| get settings                     |  **complete** | `get settings`                                              |
+| update settings                  |  **complete** | `set settings --devices-approval …`                         |
+| **Webhooks**                     |               |                                                             |
+| list webhooks                    |  **complete** | `list webhooks`                                             |
+| get webhook                      |  **complete** | `get webhook --webhook <id>`                                |
+| create webhook                   |  **complete** | `create webhook --url <endpoint> --subscription …`          |
+| update webhook                   |  **complete** | `set webhook --webhook <id> …`                              |
+| delete webhook                   |  **complete** | `delete webhook --webhook <id>`                             |
+| rotate webhook secret            |  *incomplete* | —                                                           |
+
 
 ---
 
