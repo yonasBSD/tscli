@@ -1,6 +1,4 @@
-// cmd/tscli/devices/expire/command.go
-
-package expire
+package expiry
 
 import (
 	"context"
@@ -15,8 +13,8 @@ import (
 
 func Command() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "expire",
-		Short: "Expire (invalidate) a device key",
+		Use:   "expiry",
+		Short: "Set device key expiry",
 		Long:  "Call the Tailscale API to mark a device's key as expired.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			client, err := tscli.New()

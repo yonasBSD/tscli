@@ -1,4 +1,4 @@
-package authorize
+package authorization
 
 import (
 	"encoding/json"
@@ -11,8 +11,8 @@ import (
 
 func Command() *cobra.Command {
 	command := &cobra.Command{
-		Use:   "authorize",
-		Short: "Authorize or de-authorize a device",
+		Use:   "authorization",
+		Short: "Set device authorization status",
 		Long:  "Approve or reject a Tailscale device by ID.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			client, err := tscli.New()
