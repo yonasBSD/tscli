@@ -1,8 +1,9 @@
-// cmd/tscli/get/dns/nameservers/cli.go
+// cmd/tscli/get/dns/preferences/cli.go
 //
-// `tscli get ns`
-// Return the list of custom DNS nameservers configured for the current tailnet.
-package nameservers
+// `tscli get prefs`
+// Fetch the tailnet-wide *preferences* object (Auto-Update, MagicDNS,
+// exit-node defaults, etc.) in JSON form.
+package preferences
 
 import (
 	"context"
@@ -15,12 +16,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// Command registers `tscli get ns`
+// Command registers `tscli get prefs`
 func Command() *cobra.Command {
 	return &cobra.Command{
-		Use:     "ns",
-		Aliases: []string{"nameservers"},
-		Short:   "Get tailnet DNS nameservers",
+		Use:     "prefs",
+		Aliases: []string{"preferences"},
+		Short:   "Get tailnet DNS preferences",
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			client, err := tscli.New()
 			if err != nil {
@@ -32,11 +33,11 @@ func Command() *cobra.Command {
 				context.Background(),
 				client,
 				http.MethodGet,
-				"/tailnet/{tailnet}/dns/nameservers",
+				"/tailnet/{tailnet}/dns/preferences",
 				nil,
 				&raw,
 			); err != nil {
-				return fmt.Errorf("failed to fetch nameservers: %w", err)
+				return fmt.Errorf("failed to fetch preferences: %w", err)
 			}
 
 			pretty, _ := json.MarshalIndent(raw, "", "  ")
