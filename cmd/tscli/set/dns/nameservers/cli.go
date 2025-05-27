@@ -23,8 +23,8 @@ func Command() *cobra.Command {
 	var ns []string
 
 	cmd := &cobra.Command{
-		Use:   "nameservers",
-		Short: "Set (replace) the DNS nameservers for the tailnet",
+		Use:   "ns",
+		Short: "Set the DNS nameservers for the tailnet",
 		PersistentPreRunE: func(cmd *cobra.Command, _ []string) error {
 			if len(ns) == 0 {
 				return fmt.Errorf("at least one --nameserver is required")
