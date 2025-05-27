@@ -87,7 +87,6 @@ func Command() *cobra.Command {
 				payload[d] = ips
 			}
 
-			/* ---------------------------------------------------------- */
 			client, err := tscli.New()
 			if err != nil {
 				return err

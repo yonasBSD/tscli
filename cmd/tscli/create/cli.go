@@ -2,6 +2,7 @@ package create
 
 import (
 	"github.com/jaxxstorm/tscli/cmd/tscli/create/integration"
+	"github.com/jaxxstorm/tscli/cmd/tscli/create/invite"
 	"github.com/jaxxstorm/tscli/cmd/tscli/create/key"
 	"github.com/jaxxstorm/tscli/cmd/tscli/create/webhook"
 	"github.com/spf13/cobra"
@@ -17,6 +18,7 @@ func Command() *cobra.Command {
 	command.AddCommand(postureintegration.Command())
 	command.AddCommand(key.Command())
 	command.AddCommand(webhook.Command())
+	command.AddCommand(invite.Command())
 
 	return command
 }

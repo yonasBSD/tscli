@@ -26,7 +26,7 @@ func Command() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "user",
 		Short: "List user invites in the tailnet",
-		PersistentPreRunE: func(cmd *cobra.Command, _ []string) error {
+		PersistentPreRunE: func(*cobra.Command, []string) error {
 			if state != "" {
 				if _, ok := validState[strings.ToLower(state)]; !ok {
 					return fmt.Errorf("invalid --state %q (pending|accepted|all)", state)
@@ -34,6 +34,7 @@ func Command() *cobra.Command {
 			}
 			return nil
 		},
+
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			client, err := tscli.New()
 			if err != nil {
@@ -41,30 +42,31 @@ func Command() *cobra.Command {
 			}
 
 			path := "/tailnet/{tailnet}/user-invites"
-			if state != "" && strings.ToLower(state) != "all" {
+			if s := strings.ToLower(state); s != "" && s != "all" {
 				q := url.Values{}
-				q.Set("state", strings.ToLower(state))
-				path = path + "?" + q.Encode()
+				q.Set("state", s)
+				path += "?" + q.Encode()
 			}
 
-			var raw []byte
+			var resp json.RawMessage
 			if _, err := tscli.Do(
 				context.Background(),
 				client,
 				http.MethodGet,
 				path,
 				nil,
-				&raw,
+				&resp,
 			); err != nil {
 				return err
 			}
 
-			pretty, _ := json.MarshalIndent(json.RawMessage(raw), "", "  ")
+			pretty, _ := json.MarshalIndent(resp, "", "  ")
 			fmt.Fprintln(os.Stdout, string(pretty))
 			return nil
 		},
 	}
 
-	cmd.Flags().StringVar(&state, "state", "", "Filter by state: pending|accepted|all")
+	cmd.Flags().StringVar(&state, "state", "",
+		`Filter by state: pending | accepted | all`)
 	return cmd
 }
