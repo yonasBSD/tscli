@@ -1,10 +1,11 @@
 package dns
 
 import (
-	"github.com/spf13/cobra"
 	"github.com/jaxxstorm/tscli/cmd/tscli/set/dns/nameservers"
 	"github.com/jaxxstorm/tscli/cmd/tscli/set/dns/preferences"
 	"github.com/jaxxstorm/tscli/cmd/tscli/set/dns/searchpaths"
+	"github.com/jaxxstorm/tscli/cmd/tscli/set/dns/split"
+	"github.com/spf13/cobra"
 )
 
 func Command() *cobra.Command {
@@ -17,6 +18,7 @@ func Command() *cobra.Command {
 	command.AddCommand(nameservers.Command())
 	command.AddCommand(preferences.Command())
 	command.AddCommand(searchpaths.Command())
+	command.AddCommand(split.Command())
 
 	return command
 }

@@ -3,12 +3,11 @@
 // Preview which ACL rules match a given user *or* dst IP:port without
 // saving the policy file.
 //
-//   # current tailnet policy against alice@example.com
-//   tscli get policy-preview --type user   --value alice@example.com --current
+//	# current tailnet policy against alice@example.com
+//	tscli get policy-preview --type user   --value alice@example.com --current
 //
-//   # draft file against 10.0.0.10:443
-//   tscli get policy-preview --type ipport --value 10.0.0.10:443 --file ./draft.hujson
-//
+//	# draft file against 10.0.0.10:443
+//	tscli get policy-preview --type ipport --value 10.0.0.10:443 --file ./draft.hujson
 package preview
 
 import (
@@ -28,11 +27,11 @@ import (
 
 func Command() *cobra.Command {
 	var (
-		kind     string
-		value    string
-		file     string
-		body     string
-		useLive  bool
+		kind    string
+		value   string
+		file    string
+		body    string
+		useLive bool
 	)
 
 	cmd := &cobra.Command{
@@ -122,10 +121,10 @@ func Command() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&kind,  "type",   "",  "user | ipport (required)")
-	cmd.Flags().StringVar(&value, "value",  "",  "email or \"ip:port\" (required)")
-	cmd.Flags().StringVar(&file,  "file",   "",  "path, file://path or '-' for stdin")
-	cmd.Flags().StringVar(&body,  "body",   "",  "inline ACL JSON/HuJSON")
+	cmd.Flags().StringVar(&kind, "type", "", "user | ipport (required)")
+	cmd.Flags().StringVar(&value, "value", "", "email or \"ip:port\" (required)")
+	cmd.Flags().StringVar(&file, "file", "", "path, file://path or '-' for stdin")
+	cmd.Flags().StringVar(&body, "body", "", "inline ACL JSON/HuJSON")
 	cmd.Flags().BoolVar(&useLive, "current", false, "use current tailnet ACL")
 
 	_ = cmd.MarkFlagRequired("type")

@@ -1,10 +1,9 @@
 package file
 
 import (
-	"github.com/tailscale/hujson"
 	"encoding/json"
+	"github.com/tailscale/hujson"
 )
-
 
 func ValidatePolicy(b []byte) error {
 	if json.Valid(b) {
