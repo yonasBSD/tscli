@@ -10,7 +10,7 @@ From your terminal you can manage devices, users, auth keys, webhooks, posture i
 | Area                     | What you can do                                                                                             |
 | ------------------------ | ----------------------------------------------------------------------------------------------------------- |
 | **Devices**              | List, get, (de)authorize, rename, force IPv4, enable subnet routes, expire, set / delete posture attributes |
-| **Keys**                 | List & get existing keys; create **auth-keys** *or* **OAuth clients** (with full scope/tag validation)      |
+| **Keys**                 | List & get existing keys; create **auth-keys** _or_ **OAuth clients** (with full scope/tag validation)      |
 | **Users**                | List (filter by type / role), get, suspend / restore / approve, manage invites                              |
 | **Tailnet settings**     | Get & patch booleans + key-expiry with a single command (`tscli set settings …`)                            |
 | **Policy file (ACL)**    | Fetch as raw HUJSON **or** canonical JSON                                                                   |
@@ -19,7 +19,7 @@ From your terminal you can manage devices, users, auth keys, webhooks, posture i
 | **Invites**              | List / delete device- or user-invites                                                                       |
 | **Contacts**             | Get & update contact emails                                                                                 |
 | **Debug switch**         | `--debug` or `TSCLI_DEBUG=1` prints full HTTP requests / responses to stderr                                |
-| **Config precedence**    | *flags* → *env* → `~/.tscli/.tscli.yaml` (or local `./.tscli.yaml`)                                         |
+| **Config precedence**    | _flags_ → _env_ → `~/.tscli/.tscli.yaml` (or local `./.tscli.yaml`)                                         |
 
 ---
 
@@ -64,7 +64,6 @@ After any method, confirm:
 tscli --version
 ```
 
-
 ---
 
 ## ⚙️ Configuration
@@ -100,68 +99,67 @@ tscli <noun> <verb> [flags]
 
 ## 📜 Coverage
 
-| API area / action                |     Status    | `tscli` command                                             |
-| -------------------------------- | :-----------: | ----------------------------------------------------------- |
-| **Devices**                      |               |                                                             |
-| list devices                     |  **complete** | `device list`                                               |
-| get device                       |  **complete** | `device get --device <id>`                                  |
-| authorize / de-authorize device  |  **complete** | `device authorize --device <id> [--approve=<bool>]`         |
-| expire device key                |  **complete** | `device expire --device <id>`                               |
-| set device name                  |  **complete** | `set name --device <id> --name <host>`                      |
-| set device tags                  |  **complete** | `set tags --device <id> --tag <tag>`                        |
-| set device IPv4                  |  **complete** | `set ip --device <id> --ip <addr>`                          |
-| list subnet routes               |  **complete** | `list routes --device <id>`                                 |
-| set subnet routes                |  **complete** | `set routes --device <id> --route <cidr> …`                 |
-| **delete device**                |  **complete** | `delete device --device <id>`                               |
-| **Device-posture attributes**    |               |                                                             |
-| get attributes                   |  **complete** | `get posture --device <id>`                                 |
-| set attribute                    |  **complete** | `set attribute --device <id> --key custom:x --value 42`     |
-| delete attribute                 |  **complete** | `delete attribute --device <id> --key custom:x`             |
-| **Posture integrations**         |               |                                                             |
-| list integrations                |  **complete** | `list posture-integrations`                                 |
-| get integration                  |  **complete** | `get posture-integration --id <id>`                         |
-| create integration               |  **complete** | `create posture-integration --provider …`                   |
-| update integration               |  **complete** | `set posture-integration --id <id> …`                       |
-| delete integration               |  *incomplete* | —                                                           |
-| **Auth / OAuth keys**            |               |                                                             |
-| list keys                        |  **complete** | `list keys`                                                 |
-| get key                          |  **complete** | `get key --key <id>`                                        |
-| create auth-key                  |  **complete** | `create key --type authkey …`                               |
-| create OAuth client              |  **complete** | `create key --type oauthclient …`                           |
-| delete / revoke key              |  *incomplete* | —                                                           |
-| **Users**                        |               |                                                             |
-| list users                       |  **complete** | `list users [--type …] [--role …]`                          |
-| get user                         |  **complete** | `get user --user <id>`                                      |
-| approve / suspend / restore user |  **complete** | `set user-access --user <id> --approve/--suspend/--restore` |
-| delete user                      |  **complete** | `delete user --user <id>`                                   |
-| **Invites**                      |               |                                                             |
-| list user invites                |  **complete** | `list invites user [--state …]`                             |
-| list device invites              |  **complete** | `list invites device --device <id>`                         |
-| delete invite                    |  *incomplete* | —                                                           |
-| get invite                       |  *incomplete* | —                                                           |
-| **Contacts**                     |               |                                                             |
-| update contact                   |  **complete** | `set contacts --contact <id> --email <e@x>`                 |
-| list / create / delete contacts  |  *incomplete* | —                                                           |
-| **DNS**                          |               |                                                             |
-| list nameservers                 |  **complete** | `list nameservers`                                          |
-| set nameservers                  |  **complete** | `set nameservers --nameserver <ip> …`                       |
-| advanced DNS settings            |  *incomplete* | —                                                           |
-| **Policy file (ACL)**            |               |                                                             |
-| get policy file                  |  **complete** | `get policy [--json]`                                       |
-| set policy file                  |  **complete** | `set policy --file <acl.hujson>`                            |
-| preview rule matches             |  **complete** | `get policy-preview --type … --value … [--file]`            |
-| policy history / tests           |  *incomplete* | —                                                           |
-| **Tailnet settings**             |               |                                                             |
-| get settings                     |  **complete** | `get settings`                                              |
-| update settings                  |  **complete** | `set settings --devices-approval …`                         |
-| **Webhooks**                     |               |                                                             |
-| list webhooks                    |  **complete** | `list webhooks`                                             |
-| get webhook                      |  **complete** | `get webhook --webhook <id>`                                |
-| create webhook                   |  **complete** | `create webhook --url <endpoint> --subscription …`          |
-| update webhook                   |  **complete** | `set webhook --webhook <id> …`                              |
-| delete webhook                   |  **complete** | `delete webhook --webhook <id>`                             |
-| rotate webhook secret            |  *incomplete* | —                                                           |
-
+| API area / action                |    Status    | `tscli` command                                             |
+| -------------------------------- | :----------: | ----------------------------------------------------------- |
+| **Devices**                      |              |                                                             |
+| list devices                     | **complete** | `device list`                                               |
+| get device                       | **complete** | `device get --device <id>`                                  |
+| authorize / de-authorize device  | **complete** | `device authorize --device <id> [--approve=<bool>]`         |
+| expire device key                | **complete** | `device expire --device <id>`                               |
+| set device name                  | **complete** | `set name --device <id> --name <host>`                      |
+| set device tags                  | **complete** | `set tags --device <id> --tag <tag>`                        |
+| set device IPv4                  | **complete** | `set ip --device <id> --ip <addr>`                          |
+| list subnet routes               | **complete** | `list routes --device <id>`                                 |
+| set subnet routes                | **complete** | `set routes --device <id> --route <cidr> …`                 |
+| **delete device**                | **complete** | `delete device --device <id>`                               |
+| **Device-posture attributes**    |              |                                                             |
+| get attributes                   | **complete** | `get posture --device <id>`                                 |
+| set attribute                    | **complete** | `set attribute --device <id> --key custom:x --value 42`     |
+| delete attribute                 | **complete** | `delete attribute --device <id> --key custom:x`             |
+| **Posture integrations**         |              |                                                             |
+| list integrations                | **complete** | `list posture-integrations`                                 |
+| get integration                  | **complete** | `get posture-integration --id <id>`                         |
+| create integration               | **complete** | `create posture-integration --provider …`                   |
+| update integration               | **complete** | `set posture-integration --id <id> …`                       |
+| delete integration               | _incomplete_ | —                                                           |
+| **Auth / OAuth keys**            |              |                                                             |
+| list keys                        | **complete** | `list keys`                                                 |
+| get key                          | **complete** | `get key --key <id>`                                        |
+| create auth-key                  | **complete** | `create key --type authkey …`                               |
+| create OAuth client              | **complete** | `create key --type oauthclient …`                           |
+| delete / revoke key              | _incomplete_ | —                                                           |
+| **Users**                        |              |                                                             |
+| list users                       | **complete** | `list users [--type …] [--role …]`                          |
+| get user                         | **complete** | `get user --user <id>`                                      |
+| approve / suspend / restore user | **complete** | `set user-access --user <id> --approve/--suspend/--restore` |
+| delete user                      | **complete** | `delete user --user <id>`                                   |
+| **Invites**                      |              |                                                             |
+| list user invites                | **complete** | `list invites user [--state …]`                             |
+| list device invites              | **complete** | `list invites device --device <id>`                         |
+| delete invite                    | _incomplete_ | —                                                           |
+| get invite                       | _incomplete_ | —                                                           |
+| **Contacts**                     |              |                                                             |
+| update contact                   | **complete** | `set contacts --contact <id> --email <e@x>`                 |
+| list / create / delete contacts  | _incomplete_ | —                                                           |
+| **DNS**                          |              |                                                             |
+| list nameservers                 | **complete** | `list nameservers`                                          |
+| set nameservers                  | **complete** | `set nameservers --nameserver <ip> …`                       |
+| advanced DNS settings            | _incomplete_ | —                                                           |
+| **Policy file (ACL)**            |              |                                                             |
+| get policy file                  | **complete** | `get policy [--json]`                                       |
+| set policy file                  | **complete** | `set policy --file <acl.hujson>`                            |
+| preview rule matches             | **complete** | `get policy-preview --type … --value … [--file]`            |
+| policy history / tests           | _incomplete_ | —                                                           |
+| **Tailnet settings**             |              |                                                             |
+| get settings                     | **complete** | `get settings`                                              |
+| update settings                  | **complete** | `set settings --devices-approval …`                         |
+| **Webhooks**                     |              |                                                             |
+| list webhooks                    | **complete** | `list webhooks`                                             |
+| get webhook                      | **complete** | `get webhook --webhook <id>`                                |
+| create webhook                   | **complete** | `create webhook --url <endpoint> --subscription …`          |
+| update webhook                   | **complete** | `set webhook --webhook <id> …`                              |
+| delete webhook                   | **complete** | `delete webhook --webhook <id>`                             |
+| rotate webhook secret            | _incomplete_ | —                                                           |
 
 ---
 
