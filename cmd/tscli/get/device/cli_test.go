@@ -54,7 +54,7 @@ func TestGetDeviceFlagValidation(t *testing.T) {
 		{"unknown flag", []string{"--bogus"}, false, true},
 		{"device id ok", []string{"--device", "123"}, true, false},
 		{"ip ok", []string{"--ip", "100.64.0.1"}, true, false},
-		{"hostname ok", []string{"--hostname", "ok"}, true, false},
+		{"hostname ok", []string{"--name", "ok"}, true, false},
 		{"mutually exclusive", []string{"--device", "123", "--ip", "100.64.0.1"}, false, true},
 	}
 
