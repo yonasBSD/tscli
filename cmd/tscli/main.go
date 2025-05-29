@@ -37,6 +37,11 @@ func configureCLI() *cobra.Command {
 		Use:  "tscli",
 		Long: "A CLI tool for interacting with the Tailscale API.",
 		PersistentPreRunE: func(cmd *cobra.Command, _ []string) error {
+			// skip validation for "help" and "version" commands
+			if cmd.Name() == "help" || cmd.Name() == "version" {
+				return nil
+			}
+
 			_ = v.BindPFlags(cmd.Flags())
 			if v.GetString("api-key") == "" {
 				return fmt.Errorf("a Tailscale API key is required")
