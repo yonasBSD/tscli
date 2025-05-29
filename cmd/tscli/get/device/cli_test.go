@@ -17,7 +17,7 @@ type dummyRT struct{ list, one []byte }
 func (d *dummyRT) RoundTrip(req *http.Request) (*http.Response, error) {
 	var body []byte
 	switch {
-	case req.URL.Path == "/api/v2/tailnet/-/devices":
+	case req.URL.Path == "/api/v2/tailnet/devices":
 		body = d.list
 	default:
 		body = d.one
@@ -32,7 +32,13 @@ func (d *dummyRT) RoundTrip(req *http.Request) (*http.Response, error) {
 func TestGetDeviceFlagValidation(t *testing.T) {
 	t.Parallel()
 
-	fake := tsapi.Device{ID: "123", NodeID: "node-123", Hostname: "ok", OS: "linux", Addresses: []string{"100.64.0.1"}}
+	fake := tsapi.Device{
+		ID:        "123",
+		NodeID:    "node-123",
+		Hostname:  "ok",
+		OS:        "linux",
+		Addresses: []string{"100.64.0.1"},
+	}
 	one, _ := json.Marshal(fake)
 	list, _ := json.Marshal(map[string][]tsapi.Device{"devices": {fake}})
 
@@ -54,7 +60,7 @@ func TestGetDeviceFlagValidation(t *testing.T) {
 		{"unknown flag", []string{"--bogus"}, false, true},
 		{"device id ok", []string{"--device", "123"}, true, false},
 		{"ip ok", []string{"--ip", "100.64.0.1"}, true, false},
-		{"hostname ok", []string{"--hostname", "ok"}, true, false},
+		{"hostname ok", []string{"--name", "ok"}, true, false},
 		{"mutually exclusive", []string{"--device", "123", "--ip", "100.64.0.1"}, false, true},
 	}
 
