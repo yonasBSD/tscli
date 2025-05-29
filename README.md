@@ -41,6 +41,12 @@ scoop bucket add jaxxstorm https://github.com/jaxxstorm/scoop-bucket.git
 scoop install tscli
 ```
 
+#### Nix
+
+```bash
+nix shell github:jaxxstorm/tscli
+```
+
 #### Manual download
 
 Pre-built archives for **macOS, Linux, Windows (x86-64 / arm64)** are published on every release:
