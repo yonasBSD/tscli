@@ -13,8 +13,7 @@ require (
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/pflag v1.0.6
 	github.com/spf13/viper v1.20.1
-	github.com/tailscale/hujson v0.0.0-20220506213045-af5ed07155e5
-	gopkg.in/yaml.v3 v3.0.1
+	github.com/tailscale/hujson v0.0.0-20250226034555-ec1d1c113d33
 	tailscale.com/client/tailscale/v2 v2.0.0-20250509161557-5fad10cf3a33
 )
 
