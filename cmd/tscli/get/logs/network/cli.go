@@ -12,13 +12,13 @@ package network
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/url"
-	"os"
 
 	"github.com/jaxxstorm/tscli/pkg/tscli"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+	"github.com/jaxxstorm/tscli/pkg/output"
 )
 
 func Command() *cobra.Command {
@@ -56,8 +56,9 @@ func Command() *cobra.Command {
 				return err
 			}
 
-			pretty, _ := json.MarshalIndent(resp, "", "  ")
-			fmt.Fprintln(os.Stdout, string(pretty))
+			out, _ := json.MarshalIndent(resp, "", "  ")
+			format := viper.GetString("format")
+			output.Print(format, out)
 			return nil
 		},
 	}
