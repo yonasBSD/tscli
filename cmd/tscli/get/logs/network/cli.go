@@ -1,38 +1,58 @@
 // cmd/tscli/get/logs/network/cli.go
 //
-// Fetch network audit logs from the Tailscale API.
+// Fetch network-audit logs.
 //
-//	# Get network logs for a specific day
-//	tscli get logs network --start 2024-01-01T00:00:00Z --end 2024-01-01T23:59:59Z
+//	# The last 30 minutes
+//	tscli get logs network --start 30m
 //
-//	# Get network logs for the last hour
-//	tscli get logs network --start $(date -d '1 hour ago' -Iseconds) --end $(date -Iseconds)
+//	# A specific day
+//	tscli get logs network -s 2024-05-01T00:00:00Z -e 2024-05-01T23:59:59Z
 package network
 
 import (
 	"context"
 	"encoding/json"
+	"errors"
+	"fmt"
 	"net/http"
 	"net/url"
+	"time"
 
+	"github.com/jaxxstorm/tscli/pkg/output"
+	tstime "github.com/jaxxstorm/tscli/pkg/time"
 	"github.com/jaxxstorm/tscli/pkg/tscli"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/jaxxstorm/tscli/pkg/output"
 )
+
+// --------------------------------------------------------------------
+// command
+// --------------------------------------------------------------------
 
 func Command() *cobra.Command {
 	var (
-		startTime string
-		endTime   string
+		startFlag string
+		endFlag   string
 	)
 
 	cmd := &cobra.Command{
 		Use:   "network",
 		Short: "Get network audit logs for the tailnet",
-		Long:  "List all network audit logs for a tailnet within a time range.",
-
+		Long:  "Fetch audit log entries for a given period. --start accepts RFC3339 or a relative offset like 30d, 12h, 45m.",
 		RunE: func(cmd *cobra.Command, _ []string) error {
+			start, err := tstime.ParseTime(startFlag, true)
+			if err != nil {
+				return fmt.Errorf("invalid --start: %w", err)
+			}
+
+			end, err := tstime.ParseTime(endFlag, true)
+			if err != nil {
+				return fmt.Errorf("invalid --end: %w", err)
+			}
+			if !start.Before(end) {
+				return errors.New("--start must be before --end/now")
+			}
+
 			client, err := tscli.New()
 			if err != nil {
 				return err
@@ -40,36 +60,27 @@ func Command() *cobra.Command {
 
 			path := "/tailnet/{tailnet}/logging/network"
 			q := url.Values{}
-			q.Add("start", startTime)
-			q.Add("end", endTime)
+			q.Set("start", start.Format(time.RFC3339))
+			q.Set("end", end.Format(time.RFC3339))
 			path += "?" + q.Encode()
 
-			var resp json.RawMessage
+			var raw json.RawMessage
 			if _, err := tscli.Do(
-				context.Background(),
-				client,
-				http.MethodGet,
-				path,
-				nil,
-				&resp,
+				context.Background(), client, http.MethodGet,
+				path, nil, &raw,
 			); err != nil {
 				return err
 			}
 
-			out, _ := json.MarshalIndent(resp, "", "  ")
-			format := viper.GetString("format")
-			output.Print(format, out)
-			return nil
+			return output.Print(viper.GetString("format"), raw)
 		},
 	}
 
-	cmd.Flags().StringVarP(&startTime, "start", "s", "",
-		`Start time in RFC3339 format (required). Example: "2024-01-01T00:00:00Z"`)
-	cmd.Flags().StringVarP(&endTime, "end", "e", "",
-		`End time in RFC3339 format (required). Example: "2024-01-01T23:59:59Z"`)
+	cmd.Flags().StringVarP(&startFlag, "start", "s", "",
+		`RFC3339 timestamp *or* relative offset (e.g. "30d", "90m"). Required.`)
+	cmd.Flags().StringVarP(&endFlag, "end", "e", "",
+		`RFC3339 timestamp. Defaults to the current time.`)
 
 	_ = cmd.MarkFlagRequired("start")
-	_ = cmd.MarkFlagRequired("end")
-
 	return cmd
 }
