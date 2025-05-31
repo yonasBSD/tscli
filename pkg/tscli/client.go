@@ -66,8 +66,18 @@ func Do(
 		b, _ := url.Parse(defaultBaseURL)
 		base = b
 	}
-	path = strings.ReplaceAll(path, "{tailnet}", url.PathEscape(c.Tailnet))
-	full := base.ResolveReference(&url.URL{Path: "/api/v2" + path})
+
+	u, err := url.Parse(path)
+	if err != nil {
+		return nil, fmt.Errorf("invalid path: %w", err)
+	}
+
+	u.Path = strings.ReplaceAll(u.Path, "{tailnet}", url.PathEscape(c.Tailnet))
+
+	full := base.ResolveReference(&url.URL{
+		Path:     "/api/v2" + u.Path,
+		RawQuery: u.RawQuery,
+	})
 
 	var rdr io.Reader
 	if body != nil {
