@@ -32,7 +32,7 @@ func ParseHumanDuration(s string) (time.Duration, error) {
 	return total, nil
 }
 
-// parseTime parses either RFC3339 or a relative duration like "2h30m" / "10d".
+// ParseTime parses either RFC3339 or a relative duration like "2h30m" / "10d".
 // If empty and allowNow==true it returns time.Now().UTC().
 func ParseTime(in string, allowNow bool) (time.Time, error) {
 	if in == "" {
