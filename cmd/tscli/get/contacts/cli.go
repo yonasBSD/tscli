@@ -4,10 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"os"
 
+	"github.com/jaxxstorm/tscli/pkg/output"
 	"github.com/jaxxstorm/tscli/pkg/tscli"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	tsapi "tailscale.com/client/tailscale/v2"
 )
 
@@ -17,7 +18,7 @@ func Command() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "contacts",
 		Short: "Get tailnet contacts from the Tailscale API",
-		RunE: func(_ *cobra.Command, _ []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			client, err := tscli.New()
 			if err != nil {
 				return err
@@ -30,7 +31,8 @@ func Command() *cobra.Command {
 			}
 
 			out, _ := json.MarshalIndent(c, "", "  ")
-			fmt.Fprintln(os.Stdout, string(out))
+			format := viper.GetString("format")
+			output.Print(format, out)
 			return nil
 		},
 	}

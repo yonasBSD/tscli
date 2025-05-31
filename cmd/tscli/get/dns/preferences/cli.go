@@ -10,10 +10,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
+
+	"github.com/jaxxstorm/tscli/pkg/output"
 
 	"github.com/jaxxstorm/tscli/pkg/tscli"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // Command registers `tscli get prefs`
@@ -40,8 +42,9 @@ func Command() *cobra.Command {
 				return fmt.Errorf("failed to fetch preferences: %w", err)
 			}
 
-			pretty, _ := json.MarshalIndent(raw, "", "  ")
-			fmt.Fprintln(os.Stdout, string(pretty))
+			out, _ := json.MarshalIndent(raw, "", "  ")
+			format := viper.GetString("format")
+			output.Print(format, out)
 			return nil
 		},
 	}

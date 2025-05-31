@@ -11,10 +11,12 @@ package routes
 import (
 	"encoding/json"
 	"fmt"
-	"os"
+
+	"github.com/jaxxstorm/tscli/pkg/output"
 
 	"github.com/jaxxstorm/tscli/pkg/tscli"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 func Command() *cobra.Command {
@@ -45,7 +47,8 @@ func Command() *cobra.Command {
 			if err != nil {
 				return fmt.Errorf("failed to marshal routes into JSON: %w", err)
 			}
-			fmt.Fprintln(os.Stdout, string(out))
+			format := viper.GetString("format")
+			output.Print(format, out)
 			return nil
 		},
 	}

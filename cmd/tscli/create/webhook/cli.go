@@ -15,12 +15,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
-	"os"
 	"sort"
 	"strings"
 
+	"github.com/jaxxstorm/tscli/pkg/output"
+
 	"github.com/jaxxstorm/tscli/pkg/tscli"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	tsapi "tailscale.com/client/tailscale/v2"
 )
 
@@ -114,7 +116,8 @@ func Command() *cobra.Command {
 			}
 
 			out, _ := json.MarshalIndent(hook, "", "  ")
-			fmt.Fprintln(os.Stdout, string(out))
+			format := viper.GetString("format")
+			output.Print(format, out)
 			return nil
 		},
 	}

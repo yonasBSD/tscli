@@ -3,12 +3,15 @@ package user
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
+
+	"github.com/jaxxstorm/tscli/pkg/output"
 
 	"github.com/jaxxstorm/tscli/pkg/tscli"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // Command registers:  tscli delete invite user --id <invite-id>
@@ -36,7 +39,14 @@ func Command() *cobra.Command {
 				return fmt.Errorf("delete invite failed: %w", err)
 			}
 
-			fmt.Fprintf(os.Stdout, `{"result":"user invite deleted","id":"%s"}`+"\n", id)
+			resp := map[string]string{
+				"result": fmt.Sprintf("user invite %s: deleted", id),
+			}
+
+			out, _ := json.MarshalIndent(resp, "", "  ")
+			format := viper.GetString("format")
+			output.Print(format, out)
+
 			return nil
 		},
 	}

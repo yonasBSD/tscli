@@ -1,38 +1,54 @@
 // cmd/tscli/get/logs/config/cli.go
 //
-// Fetch configuration audit logs from the Tailscale API.
+// Fetch configuration-audit logs.
 //
-//	# Get configuration logs for a specific day
-//	tscli get logs config --start 2024-01-01T00:00:00Z --end 2024-01-01T23:59:59Z
+//	# Last 12 h
+//	tscli get logs config --start 12h
 //
-//	# Get configuration logs for the last hour
-//	tscli get logs config --start $(date -d '1 hour ago' -Iseconds) --end $(date -Iseconds)
+//	# Specific window
+//	tscli get logs config -s 2025-05-01T00:00:00Z -e 2025-05-01T23:59:59Z
 package config
 
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
-	"os"
 
+	tstime "github.com/jaxxstorm/tscli/pkg/time"
+	"time"
+
+	"github.com/jaxxstorm/tscli/pkg/output"
 	"github.com/jaxxstorm/tscli/pkg/tscli"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 func Command() *cobra.Command {
 	var (
-		startTime string
-		endTime   string
+		startFlag string
+		endFlag   string
 	)
 
 	cmd := &cobra.Command{
 		Use:   "config",
-		Short: "Get configuration audit logs for the tailnet",
-		Long:  "List all configuration audit logs for a tailnet within a time range.",
-
+		Short: "Get configuration-audit logs for the tailnet",
+		Long:  "Fetch audit-log entries for a given period. --start accepts RFC3339 *or* a relative offset such as 30d, 6h, 90m.",
 		RunE: func(cmd *cobra.Command, _ []string) error {
+			start, err := tstime.ParseTime(startFlag, true)
+			if err != nil {
+				return fmt.Errorf("invalid --start: %w", err)
+			}
+			end, err := tstime.ParseTime(endFlag, true)
+			if err != nil {
+				return fmt.Errorf("invalid --end: %w", err)
+			}
+			if !start.Before(end) {
+				return errors.New("--start must be before --end/now")
+			}
+
 			client, err := tscli.New()
 			if err != nil {
 				return err
@@ -40,35 +56,27 @@ func Command() *cobra.Command {
 
 			path := "/tailnet/{tailnet}/logging/configuration"
 			q := url.Values{}
-			q.Add("start", startTime)
-			q.Add("end", endTime)
+			q.Set("start", start.Format(time.RFC3339))
+			q.Set("end", end.Format(time.RFC3339))
 			path += "?" + q.Encode()
 
-			var resp json.RawMessage
+			var raw json.RawMessage
 			if _, err := tscli.Do(
-				context.Background(),
-				client,
-				http.MethodGet,
-				path,
-				nil,
-				&resp,
+				context.Background(), client, http.MethodGet,
+				path, nil, &raw,
 			); err != nil {
 				return err
 			}
 
-			pretty, _ := json.MarshalIndent(resp, "", "  ")
-			fmt.Fprintln(os.Stdout, string(pretty))
-			return nil
+			return output.Print(viper.GetString("format"), raw)
 		},
 	}
 
-	cmd.Flags().StringVarP(&startTime, "start", "s", "",
-		`Start time in RFC3339 format (required). Example: "2024-01-01T00:00:00Z"`)
-	cmd.Flags().StringVarP(&endTime, "end", "e", "",
-		`End time in RFC3339 format (required). Example: "2024-01-01T23:59:59Z"`)
+	cmd.Flags().StringVarP(&startFlag, "start", "s", "",
+		`Start time (RFC3339 or relative like "24h", "30d12h"). Required.`)
+	cmd.Flags().StringVarP(&endFlag, "end", "e", "",
+		`End time in RFC3339. Defaults to “now”.`)
 
 	_ = cmd.MarkFlagRequired("start")
-	_ = cmd.MarkFlagRequired("end")
-
 	return cmd
 }

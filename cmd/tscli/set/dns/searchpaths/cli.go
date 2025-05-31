@@ -14,11 +14,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
 	"regexp"
+
+	"github.com/jaxxstorm/tscli/pkg/output"
 
 	"github.com/jaxxstorm/tscli/pkg/tscli"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var domainRE = regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9\.\-]*\.[a-zA-Z]{2,}$`)
@@ -80,8 +82,10 @@ func Command() *cobra.Command {
 				return fmt.Errorf("update failed: %w", err)
 			}
 
-			pretty, _ := json.MarshalIndent(resp, "", "  ")
-			fmt.Fprintln(os.Stdout, string(pretty))
+			out, _ := json.MarshalIndent(resp, "", "  ")
+			format := viper.GetString("format")
+			output.Print(format, out)
+			return nil
 			return nil
 		},
 	}
