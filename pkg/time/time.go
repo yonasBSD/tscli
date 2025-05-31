@@ -7,11 +7,12 @@ import (
 	"time"
 )
 
+var durRE = regexp.MustCompile(`(\d+)([dhms])`)
+
 // Accepts sequences like “30d12h45m10s”. Supported units: d, h, m, s.
 func ParseHumanDuration(s string) (time.Duration, error) {
-	re := regexp.MustCompile(`(\d+)([dhms])`)
-	matches := re.FindAllStringSubmatch(s, -1)
-	if len(matches) == 0 || re.ReplaceAllString(s, "") != "" {
+	matches := durRE.FindAllStringSubmatch(s, -1)
+	if len(matches) == 0 || durRE.ReplaceAllString(s, "") != "" {
 		return 0, errors.New("bad duration")
 	}
 
