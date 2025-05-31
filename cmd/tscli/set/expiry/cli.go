@@ -46,7 +46,6 @@ func Command() *cobra.Command {
 			format := viper.GetString("format")
 			output.Print(format, out)
 			return nil
-			return nil
 		},
 	}
 
