@@ -6,12 +6,14 @@ import (
 	"fmt"
 	"os"
 
+	configuration "github.com/jaxxstorm/tscli/cmd/tscli/config"
 	"github.com/jaxxstorm/tscli/cmd/tscli/create"
 	"github.com/jaxxstorm/tscli/cmd/tscli/delete"
 	"github.com/jaxxstorm/tscli/cmd/tscli/get"
 	"github.com/jaxxstorm/tscli/cmd/tscli/list"
 	"github.com/jaxxstorm/tscli/cmd/tscli/set"
 	"github.com/jaxxstorm/tscli/cmd/tscli/version"
+	"github.com/jaxxstorm/tscli/pkg/config"
 	"github.com/jaxxstorm/tscli/pkg/contract"
 	"github.com/jaxxstorm/tscli/pkg/output"
 	"github.com/spf13/cobra"
@@ -26,14 +28,8 @@ var (
 )
 
 func configureCLI() *cobra.Command {
+	config.Init()
 	v := viper.GetViper() // use the global instance
-
-	home, _ := os.UserHomeDir()
-	v.SetConfigName(".tscli")
-	v.SetConfigType("yaml")
-	v.AddConfigPath(".")
-	v.AddConfigPath(home)
-	_ = v.ReadInConfig()
 
 	root := &cobra.Command{
 		Use:  "tscli",
@@ -62,6 +58,7 @@ func configureCLI() *cobra.Command {
 		set.Command(),
 		create.Command(),
 		version.Command(),
+		configuration.Command(),
 	)
 
 	root.PersistentFlags().StringVarP(&apiKey, "api-key", "k",

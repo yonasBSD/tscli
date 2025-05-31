@@ -7,9 +7,9 @@ type Printer interface {
 
 // Registry of available printers.
 var registry = map[string]Printer{
-	"json":  JSONPrinter{},
-	"yaml":  YAMLPrinter{},
-	"human": HumanPrinter{},
+	"json":   JSONPrinter{},
+	"yaml":   YAMLPrinter{},
+	"human":  HumanPrinter{},
 	"pretty": PrettyPrinter{},
 }
 

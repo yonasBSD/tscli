@@ -9,11 +9,9 @@ import (
 	"sort"
 	"strings"
 	"text/tabwriter"
-
 )
 
 type HumanPrinter struct{}
-
 
 func (HumanPrinter) Print(raw []byte) error {
 	dec := json.NewDecoder(bytes.NewReader(raw))
@@ -37,7 +35,6 @@ func (HumanPrinter) Print(raw []byte) error {
 		return nil
 	}
 }
-
 
 func printArray(arr []any) error {
 	for i, itm := range arr {
@@ -73,7 +70,6 @@ func printMap(m map[string]any) error {
 	}
 	return w.Flush()
 }
-
 
 func fmtVal(v any) string {
 	switch x := v.(type) {
