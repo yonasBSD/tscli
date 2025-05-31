@@ -3,6 +3,7 @@ package output
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 )
 
@@ -20,6 +21,6 @@ func (JSONPrinter) Print(b []byte) error {
 		return err
 	}
 
-	_, err = os.Stdout.Write(out) // no trailing newline
+	_, err = fmt.Println(string(out))
 	return err
 }
