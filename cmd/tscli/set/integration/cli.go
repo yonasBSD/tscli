@@ -6,12 +6,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
 	"strings"
+
+	"github.com/jaxxstorm/tscli/pkg/output"
 
 	"github.com/jaxxstorm/tscli/pkg/tscli"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
+	"github.com/spf13/viper"
 )
 
 var validProv = map[string]struct{}{
@@ -93,7 +95,8 @@ func Command() *cobra.Command {
 				"id":     id,
 				"fields": body,
 			}, "", "  ")
-			fmt.Fprintln(os.Stdout, string(out))
+			format := viper.GetString("format")
+			output.Print(format, out)
 			return nil
 		},
 	}

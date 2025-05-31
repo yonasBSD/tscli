@@ -13,10 +13,12 @@ import (
 	"fmt"
 	"net"
 	"net/http"
-	"os"
+
+	"github.com/jaxxstorm/tscli/pkg/output"
 
 	"github.com/jaxxstorm/tscli/pkg/tscli"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 func Command() *cobra.Command {
@@ -57,7 +59,8 @@ func Command() *cobra.Command {
 				return fmt.Errorf("update failed: %w", err)
 			}
 			pretty, _ := json.MarshalIndent(resp, "", "  ")
-			fmt.Fprintln(os.Stdout, string(pretty))
+			format := viper.GetString("format")
+			output.Print(format, pretty)
 			return nil
 		},
 	}

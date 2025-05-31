@@ -10,11 +10,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"os"
 	"regexp"
+
+	"github.com/jaxxstorm/tscli/pkg/output"
 
 	"github.com/jaxxstorm/tscli/pkg/tscli"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // valid custom: key (same rules: prefix custom: and ≤50 chars total)
@@ -54,7 +56,8 @@ func Command() *cobra.Command {
 				"result": fmt.Sprintf("device %s: %s deleted", deviceID, attrKey),
 			}
 			out, _ := json.MarshalIndent(resp, "", "  ")
-			fmt.Fprintln(os.Stdout, string(out))
+			format := viper.GetString("format")
+			output.Print(format, out)
 			return nil
 		},
 	}

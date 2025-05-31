@@ -6,11 +6,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
 	"strings"
+
+	"github.com/jaxxstorm/tscli/pkg/output"
 
 	"github.com/jaxxstorm/tscli/pkg/tscli"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var validRoles = map[string]struct{}{
@@ -54,10 +56,11 @@ func Command() *cobra.Command {
 				return err
 			}
 
-			resp, _ := json.MarshalIndent(map[string]string{
+			out, _ := json.MarshalIndent(map[string]string{
 				"result": fmt.Sprintf("user %s role set to %s", userID, role),
 			}, "", "  ")
-			fmt.Fprintln(os.Stdout, string(resp))
+			format := viper.GetString("format")
+			output.Print(format, out)
 			return nil
 		},
 	}

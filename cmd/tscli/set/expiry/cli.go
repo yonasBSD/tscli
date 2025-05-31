@@ -5,10 +5,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
+
+	"github.com/jaxxstorm/tscli/pkg/output"
 
 	"github.com/jaxxstorm/tscli/pkg/tscli"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 func Command() *cobra.Command {
@@ -41,7 +43,9 @@ func Command() *cobra.Command {
 			// Print a simple JSON confirmation to stdout.
 			payload := map[string]string{"result": fmt.Sprintf("device %s expired", deviceID)}
 			out, _ := json.MarshalIndent(payload, "", "  ")
-			fmt.Fprintln(os.Stdout, string(out))
+			format := viper.GetString("format")
+			output.Print(format, out)
+			return nil
 			return nil
 		},
 	}

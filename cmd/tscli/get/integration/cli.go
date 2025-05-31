@@ -9,10 +9,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
+
+	"github.com/jaxxstorm/tscli/pkg/output"
 
 	"github.com/jaxxstorm/tscli/pkg/tscli"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 func Command() *cobra.Command {
@@ -30,20 +32,21 @@ func Command() *cobra.Command {
 				return err
 			}
 
-			var integ map[string]any
+			var raw map[string]any
 			if _, err := tscli.Do(
 				context.Background(),
 				client,
 				http.MethodGet,
 				"/tailnet/{tailnet}/posture/integrations/"+id,
 				nil,
-				&integ,
+				&raw,
 			); err != nil {
 				return fmt.Errorf("failed to get posture integration %s: %w", id, err)
 			}
 
-			out, _ := json.MarshalIndent(integ, "", "  ")
-			fmt.Fprintln(os.Stdout, string(out))
+			out, _ := json.MarshalIndent(raw, "", "  ")
+			format := viper.GetString("format")
+			output.Print(format, out)
 			return nil
 		},
 	}

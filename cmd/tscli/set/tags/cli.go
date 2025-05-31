@@ -6,11 +6,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"os"
 	"regexp"
+
+	"github.com/jaxxstorm/tscli/pkg/output"
 
 	"github.com/jaxxstorm/tscli/pkg/tscli"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var tagRe = regexp.MustCompile(`^tag:[A-Za-z0-9_\-]+$`)
@@ -51,7 +53,8 @@ func Command() *cobra.Command {
 				"device": deviceID,
 				"tags":   tags,
 			}, "", "  ")
-			fmt.Fprintln(os.Stdout, string(out))
+			format := viper.GetString("format")
+			output.Print(format, out)
 			return nil
 		},
 	}
