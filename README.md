@@ -77,7 +77,7 @@ tscli --version
 | Option            | Flag / Env var                          | YAML key  | Default |
 | ----------------- | --------------------------------------- | --------- | ------- |
 | Tailscale API key | `--api-key`, `-k` / `TAILSCALE_API_KEY` | `api-key` | —       |
-| Tailnet name      | `--tailnet`, `-n` / `TAILSCALE_TAILNET` | `tailnet` | `-`     |
+| Tailnet name      | `--tailnet`, `-n` / `TAILSCALE_TAILNET` | `tailnet` | —       |
 
 ```yaml
 # ~/.tscli/.tscli.yaml
