@@ -96,7 +96,7 @@ tscli <noun> <verb> [flags]
 
 ## 📜 Coverage
 
-| API area / action                |       Status       | `tscli` command                                             |
+| API Area / Action                |       Status       | `tscli` Command                                             |
 | -------------------------------- | :----------------: | ----------------------------------------------------------- |
 | **Devices**                      |                    |                                                             |
 | list devices                     | :white_check_mark: | `device list`                                               |
