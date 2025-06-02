@@ -206,4 +206,4 @@ go test ./...
 
 ## 📄 License
 
-MIT — see `LICENSE`.
+MIT — see [`LICENSE`](./LICENSE).
