@@ -3,8 +3,6 @@
 `tscli` is a fast, single-binary CLI for the [Tailscale HTTP API](https://tailscale.com/api).
 From your terminal you can manage devices, users, auth keys, webhooks, posture integrations, tailnet-wide settings, and even hit raw endpoints when the SDK hasn’t caught up yet.
 
----
-
 ## ✨ Highlights
 
 | Area                     | What you can do                                                                                             |
@@ -20,8 +18,6 @@ From your terminal you can manage devices, users, auth keys, webhooks, posture i
 | **Contacts**             | Get & update contact emails                                                                                 |
 | **Debug switch**         | `--debug` or `TSCLI_DEBUG=1` prints full HTTP requests / responses to stderr                                |
 | **Config precedence**    | _flags_ → _env_ → `~/.tscli/.tscli.yaml` (or local `./.tscli.yaml`)                                         |
-
----
 
 ## 🔧 Install
 
@@ -70,8 +66,6 @@ After any method, confirm:
 tscli --version
 ```
 
----
-
 ## ⚙️ Configuration
 
 | Option            | Flag / Env var                          | YAML key  | Default |
@@ -86,8 +80,6 @@ tailnet: example.com
 format: pretty # other options are: human, json or yaml
 ```
 
----
-
 ## 🚀 Usage
 
 ```text
@@ -101,8 +93,6 @@ tscli <noun> <verb> [flags]
 -n, --tailnet string   Tailnet (default "-")
 -d, --debug            Dump raw HTTP traffic to stderr
 ```
-
----
 
 ## 📜 Coverage
 
@@ -168,8 +158,6 @@ tscli <noun> <verb> [flags]
 | delete webhook                   | :white_check_mark: | `delete webhook --webhook <id>`                             |
 | rotate webhook secret            |        :x:         | —                                                           |
 
----
-
 ### Quick examples
 
 ```bash
@@ -186,8 +174,6 @@ tscli create webhook \
   --subscription nodeDeleted
 ```
 
----
-
 ## 🛠 Development
 
 ```bash
@@ -201,8 +187,6 @@ Tests & lint:
 ```bash
 go test ./...
 ```
-
----
 
 ## 📄 License
 
