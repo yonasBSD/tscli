@@ -154,9 +154,9 @@ tscli <noun> <verb> [flags]
 | list webhooks                    | :white_check_mark: | `list webhooks`                                             |
 | get webhook                      | :white_check_mark: | `get webhook --webhook <id>`                                |
 | create webhook                   | :white_check_mark: | `create webhook --url <endpoint> --subscription …`          |
-| update webhook                   | :white_check_mark: | `set webhook --webhook <id> …`                              |
 | delete webhook                   | :white_check_mark: | `delete webhook --webhook <id>`                             |
 | rotate webhook secret            |        :x:         | —                                                           |
+| update webhook                   |        :x:         | —                                                           |
 
 ### Quick examples
 
