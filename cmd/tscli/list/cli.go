@@ -5,11 +5,11 @@ import (
 	"github.com/jaxxstorm/tscli/cmd/tscli/list/integration"
 	"github.com/jaxxstorm/tscli/cmd/tscli/list/invites"
 	"github.com/jaxxstorm/tscli/cmd/tscli/list/keys"
+	"github.com/jaxxstorm/tscli/cmd/tscli/list/logs"
 	"github.com/jaxxstorm/tscli/cmd/tscli/list/nameservers"
 	"github.com/jaxxstorm/tscli/cmd/tscli/list/routes"
 	"github.com/jaxxstorm/tscli/cmd/tscli/list/users"
 	"github.com/jaxxstorm/tscli/cmd/tscli/list/webhooks"
-	"github.com/jaxxstorm/tscli/cmd/tscli/list/logs"
 	"github.com/spf13/cobra"
 )
 

@@ -17,7 +17,7 @@ func Command() *cobra.Command {
 			config.WarnIfOverrides(cmd.ErrOrStderr(), cmd)
 
 			out, _ := json.MarshalIndent(viper.AllSettings(), "", "  ")
-			return output.Print(viper.GetString("format"), out)
+			return output.Print(viper.GetString("output"), out)
 		},
 	}
 	return cmd

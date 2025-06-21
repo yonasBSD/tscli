@@ -49,8 +49,8 @@ Example
 			if err != nil {
 				return fmt.Errorf("failed to marshal JSON: %w", err)
 			}
-			format := viper.GetString("format")
-			output.Print(format, out)
+			outputType := viper.GetString("output")
+			output.Print(outputType, out)
 			return nil
 		},
 	}

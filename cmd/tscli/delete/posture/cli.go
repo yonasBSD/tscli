@@ -56,8 +56,8 @@ func Command() *cobra.Command {
 				"result": fmt.Sprintf("device %s: %s deleted", deviceID, attrKey),
 			}
 			out, _ := json.MarshalIndent(resp, "", "  ")
-			format := viper.GetString("format")
-			output.Print(format, out)
+			outputType := viper.GetString("output")
+			output.Print(outputType, out)
 			return nil
 		},
 	}

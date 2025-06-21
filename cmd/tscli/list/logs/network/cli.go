@@ -25,7 +25,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-
 func Command() *cobra.Command {
 	var (
 		startFlag string

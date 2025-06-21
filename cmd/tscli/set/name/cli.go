@@ -36,8 +36,8 @@ func Command() *cobra.Command {
 			out, _ := json.MarshalIndent(map[string]string{
 				"result": fmt.Sprintf("device %s name set to %s", deviceID, newName),
 			}, "", "  ")
-			format := viper.GetString("format")
-			output.Print(format, out)
+			outputType := viper.GetString("output")
+			output.Print(outputType, out)
 			return nil
 		},
 	}

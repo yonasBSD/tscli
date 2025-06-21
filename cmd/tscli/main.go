@@ -22,10 +22,10 @@ import (
 )
 
 var (
-	apiKey  string
-	tailnet string
-	debug   bool
-	format  string
+	apiKey     string
+	tailnet    string
+	debug      bool
+	outputType string
 )
 
 func configureCLI() *cobra.Command {
@@ -67,20 +67,20 @@ func configureCLI() *cobra.Command {
 		"",
 		"Tailscale API key")
 	root.PersistentFlags().StringVarP(
-		&format, "format", "f", "",
-		fmt.Sprintf("Output format: %v", output.Available()),
+		&outputType, "output", "f", "",
+		fmt.Sprintf("Output: %v", output.Available()),
 	)
 	root.PersistentFlags().StringVarP(&tailnet, "tailnet", "n", v.GetString("tailnet"), "Tailscale tailnet")
 
-	v.SetDefault("format", "json")
+	v.SetDefault("output", "json")
 
 	v.AutomaticEnv()
 	v.BindEnv("api-key", "TAILSCALE_API_KEY")
 	v.BindEnv("tailnet", "TAILSCALE_TAILNET")
-	v.BindEnv("format", "TSCLI_FORMAT")
+	v.BindEnv("output", "TSCLI_OUTPUT")
 	v.BindPFlag("api-key", root.PersistentFlags().Lookup("api-key"))
 	v.BindPFlag("tailnet", root.PersistentFlags().Lookup("tailnet"))
-	v.BindPFlag("format", root.PersistentFlags().Lookup("format"))
+	v.BindPFlag("output", root.PersistentFlags().Lookup("output"))
 	root.PersistentFlags().BoolVarP(&debug, "debug", "d", false, "Dump HTTP requests/responses")
 	v.BindPFlag("debug", root.PersistentFlags().Lookup("debug"))
 	v.BindEnv("debug", "TSCLI_DEBUG")
