@@ -96,67 +96,96 @@ tscli <noun> <verb> [flags]
 
 ## 📜 Coverage
 
-| API Area / Action                |       Status       | `tscli` Command                                             |
-| -------------------------------- | :----------------: | ----------------------------------------------------------- |
-| **Devices**                      |                    |                                                             |
-| list devices                     | :white_check_mark: | `device list`                                               |
-| get device                       | :white_check_mark: | `device get --device <id>`                                  |
-| authorize / de-authorize device  | :white_check_mark: | `device authorize --device <id> [--approve=<bool>]`         |
-| expire device key                | :white_check_mark: | `device expire --device <id>`                               |
-| set device name                  | :white_check_mark: | `set name --device <id> --name <host>`                      |
-| set device tags                  | :white_check_mark: | `set tags --device <id> --tag <tag>`                        |
-| set device IPv4                  | :white_check_mark: | `set ip --device <id> --ip <addr>`                          |
-| list subnet routes               | :white_check_mark: | `list routes --device <id>`                                 |
-| set subnet routes                | :white_check_mark: | `set routes --device <id> --route <cidr> …`                 |
-| **delete device**                | :white_check_mark: | `delete device --device <id>`                               |
-| **Device-posture attributes**    |                    |                                                             |
-| get attributes                   | :white_check_mark: | `get posture --device <id>`                                 |
-| set attribute                    | :white_check_mark: | `set attribute --device <id> --key custom:x --value 42`     |
-| delete attribute                 | :white_check_mark: | `delete attribute --device <id> --key custom:x`             |
-| **Posture integrations**         |                    |                                                             |
-| list integrations                | :white_check_mark: | `list posture-integrations`                                 |
-| get integration                  | :white_check_mark: | `get posture-integration --id <id>`                         |
-| create integration               | :white_check_mark: | `create posture-integration --provider …`                   |
-| update integration               | :white_check_mark: | `set posture-integration --id <id> …`                       |
-| delete integration               |        :x:         | —                                                           |
-| **Auth / OAuth keys**            |                    |                                                             |
-| list keys                        | :white_check_mark: | `list keys`                                                 |
-| get key                          | :white_check_mark: | `get key --key <id>`                                        |
-| create auth-key                  | :white_check_mark: | `create key --type authkey …`                               |
-| create OAuth client              | :white_check_mark: | `create key --type oauthclient …`                           |
-| delete / revoke key              |        :x:         | —                                                           |
-| **Users**                        |                    |                                                             |
-| list users                       | :white_check_mark: | `list users [--type …] [--role …]`                          |
-| get user                         | :white_check_mark: | `get user --user <id>`                                      |
-| approve / suspend / restore user | :white_check_mark: | `set user-access --user <id> --approve/--suspend/--restore` |
-| delete user                      | :white_check_mark: | `delete user --user <id>`                                   |
-| **Invites**                      |                    |                                                             |
-| list user invites                | :white_check_mark: | `list invites user [--state …]`                             |
-| list device invites              | :white_check_mark: | `list invites device --device <id>`                         |
-| delete invite                    |        :x:         | —                                                           |
-| get invite                       |        :x:         | —                                                           |
-| **Contacts**                     |                    |                                                             |
-| update contact                   | :white_check_mark: | `set contacts --contact <id> --email <e@x>`                 |
-| list / create / delete contacts  |        :x:         | —                                                           |
-| **DNS**                          |                    |                                                             |
-| list nameservers                 | :white_check_mark: | `list nameservers`                                          |
-| set nameservers                  | :white_check_mark: | `set nameservers --nameserver <ip> …`                       |
-| advanced DNS settings            |        :x:         | —                                                           |
-| **Policy file (ACL)**            |                    |                                                             |
-| get policy file                  | :white_check_mark: | `get policy [--json]`                                       |
-| set policy file                  | :white_check_mark: | `set policy --file <acl.hujson>`                            |
-| preview rule matches             | :white_check_mark: | `get policy-preview --type … --value … [--file]`            |
-| policy history / tests           |        :x:         | —                                                           |
-| **Tailnet settings**             |                    |                                                             |
-| get settings                     | :white_check_mark: | `get settings`                                              |
-| update settings                  | :white_check_mark: | `set settings --devices-approval …`                         |
-| **Webhooks**                     |                    |                                                             |
-| list webhooks                    | :white_check_mark: | `list webhooks`                                             |
-| get webhook                      | :white_check_mark: | `get webhook --id <id>`                                     |
-| create webhook                   | :white_check_mark: | `create webhook --url <endpoint> --subscription …`          |
-| update webhook                   |        :x:         | —                                                           |
-| delete webhook                   | :white_check_mark: | `delete webhook --id <id>`                                  |
-| rotate webhook secret            | :white_check_mark: | `rotate webhook --id <id>`                                  |
+## 📜 Coverage
+
+| API Area / Action                                    | Status | Command |
+| ---------------------------------------------------- | ------ | ------- |
+| **Devices**                                          |        |         |
+| List tailnet devices                                 | :white_check_mark:        |         |
+| Get a device                                         | :white_check_mark:     |         |
+| Delete a device                                      | :white_check_mark:        |         |
+| Expire a device's key                                | :white_check_mark:       |         |
+| List device routes                                   | :white_check_mark:        |         |
+| Set device routes                                    | :white_check_mark:       |         |
+| Authorize device                                     | :white_check_mark:        |         |
+| Set device name                                      |        |         |
+| Set device tags                                      | :white_check_mark:        |         |
+| Update device key                                    |        |         |
+| Set device IPv4 address                              | :white_check_mark:       |         |
+| Get device posture attributes                        | :white_check_mark:       |         |
+| Set custom device posture attributes                 | :white_check_mark:       |         |
+| Delete custom device posture attributes              | :white_check_mark:        |         |
+| **Device Invites**                                   |        |         |
+| List device invites                                  | :white_check_mark:       |         |
+| Create device invites                                | :white_check_mark:      |         |
+| Get a device invite                                  |        |         |
+| Delete a device invite                               | :white_check_mark:        |         |
+| Resend a device invite                               |        |         |
+| Accept a device invite                               |        |         |
+| **User Invites**                                      |        |         |
+| List user invites                                    | :white_check_mark:        |         |
+| Create user invites                                  | :white_check_mark:       |         |
+| Get a user invite                                    |        |         |
+| Delete a user invite                                 | :white_check_mark:       |         |
+| Resend a user invite                                 |        |         |
+| **Logging**                                          |        |         |
+| List configuration audit logs                        | :white_check_mark:      |         |
+| List network flow logs                               | :white_check_mark:      |         |
+| Get log streaming status                             |        |         |
+| Get log streaming configuration                      |        |         |
+| Set log streaming configuration                      |        |         |
+| Disable log streaming                                |        |         |
+| Create or get AWS external id                        |        |         |
+| Validate external ID integration with IAM role trust policy |        |         |
+| **DNS**                                              |        |         |
+| List DNS nameservers                                 | :white_check_mark:        |         |
+| Set DNS nameservers                                  | :white_check_mark:        |         |
+| Get DNS preferences                                  | :white_check_mark:      |         |
+| Set DNS preferences                                  | :white_check_mark:       |         |
+| List DNS search paths                                |        |         |
+| Set DNS search paths                                 | :white_check_mark:       |         |
+| Get split DNS                                        | :white_check_mark:      |         |
+| Update split DNS                                     | :white_check_mark:       |         |
+| Set split DNS                                        | :white_check_mark:       |         |
+| **Keys**                                             |        |         |
+| List tailnet keys                                    | :white_check_mark:       |         |
+| Create an auth key or OAuth client                   | :white_check_mark:      |         |
+| Get key                                              | :white_check_mark:      |         |
+| Delete key                                           |        |         |
+| **Policy File**                                      |        |         |
+| Get policy file                                      | :white_check_mark:      |         |
+| Set policy file                                      |        |         |
+| Preview rule matches                                 |        |         |
+| Validate and test policy file                        |        |         |
+| **Device Posture**                                   |        |         |
+| List all posture integrations                        | :white_check_mark:        |         |
+| Create a posture integration                         | :white_check_mark:       |         |
+| Get a posture integration                            |        |         |
+| Update a posture integration                         | :white_check_mark:       |         |
+| Delete a posture integration                         |        |         |
+| **Users**                                            |        |         |
+| List users                                           | :white_check_mark:        |         |
+| Get a user                                           |        |         |
+| Update user role                                     | :white_check_mark:       |         |
+| Approve a user                                       | :white_check_mark:       |         |
+| Suspend a user                                       | :white_check_mark:       |         |
+| Restore a user                                       |        |         |
+| Delete a user                                        | :white_check_mark:        |         |
+| **Contacts**                                         |        |         |
+| Get contacts                                         | :white_check_mark:      |         |
+| Update contact                                       | :white_check_mark:       |         |
+| Resend verification email                            |        |         |
+| **Webhooks**                                         |        |         |
+| List webhooks                                        | :white_check_mark:       |         |
+| Create a webhook                                     | :white_check_mark:       |         |
+| Get webhook                                          | :white_check_mark:      |         |
+| Update webhook                                       |        |         |
+| Delete webhook                                       | :white_check_mark:        |         |
+| Test a webhook                                       |        |         |
+| Rotate webhook secret                                | :white_check_mark:       |         |
+| **TailnetSettings**                                  |        |         |
+| Get tailnet settings                                 | :white_check_mark:      |         |
+| Update tailnet settings                              | :white_check_mark:       |         |
 
 ### Quick examples
 
