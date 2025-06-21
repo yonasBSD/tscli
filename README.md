@@ -98,94 +98,90 @@ tscli <noun> <verb> [flags]
 
 ## 📜 Coverage
 
-| API Area / Action                                    | Status | Command |
-| ---------------------------------------------------- | ------ | ------- |
-| **Devices**                                          |        |         |
-| List tailnet devices                                 | :white_check_mark: | `tscli list devices` |
-| Get a device                                         | :white_check_mark: | `tscli get device --device <device>`|
-| Delete a device                                      | :white_check_mark: | `tscli delete device --device <device>`|
-| Expire a device's key                                | :white_check_mark: |         |
-| List device routes                                   | :white_check_mark: | `tscli list routes --device <device>` |
-| Set device routes                                    | :white_check_mark: | `tscli set route --device <device> --route <cidr>`|
-| Authorize device                                     | :white_check_mark: | `tscli set authorization --device <device_id> --approve=true`|
-| Set device name                                      |   :x:     |         |
-| Set device tags                                      | :white_check_mark: | `tscli set tags --device <device_id> --tag "tag:foo" --tag "tag:bar"`|
-| Update device key                                    |   :x:     |         |
-| Set device IPv4 address                              | :white_check_mark: | `tscli set ip --device <device> --ip <ip>`         |
-| Get device posture attributes                        | :white_check_mark: | `tscli get posture --device <device>` |
-| Set custom device posture attributes                 | :white_check_mark: | `tscli set posture --device <device> --key custom:foo --value bar` |
-| Delete custom device posture attributes              | :white_check_mark: | `tscli delete posture --device <device> --key custom:foo`|
-| **Device Invites**                                   |        |         |
-| List device invites                                  | :white_check_mark: | `tscli list invites device --device <device>` |
-| Create device invites                                | :white_check_mark: | `tscli create invite device --device <device>`|
-| Get a device invite                                  |     :x:            |         |
-| Delete a device invite                               | :white_check_mark: | `tscli delete invite device --id <invite-id>`         |
-| Resend a device invite                               |     :x:            |         |
-| Accept a device invite                               |     :x:           |         |
-| **User Invites**                                      |        |         |
-| List user invites                                    | :white_check_mark:        |         |
-| Create user invites                                  | :white_check_mark:       |         |
-| Get a user invite                                    |        |         |
-| Delete a user invite                                 | :white_check_mark:       |         |
-| Resend a user invite                                 |        |         |
-| **Logging**                                          |        |         |
-| List configuration audit logs                        | :white_check_mark:      |         |
-| List network flow logs                               | :white_check_mark:      |         |
-| Get log streaming status                             |        |         |
-| Get log streaming configuration                      |        |         |
-| Set log streaming configuration                      |        |         |
-| Disable log streaming                                |        |         |
-| Create or get AWS external id                        |        |         |
-| Validate external ID integration with IAM role trust policy |        |         |
-| **DNS**                                              |        |         |
-| List DNS nameservers                                 | :white_check_mark:        |         |
-| Set DNS nameservers                                  | :white_check_mark:        |         |
-| Get DNS preferences                                  | :white_check_mark:      |         |
-| Set DNS preferences                                  | :white_check_mark:       |         |
-| List DNS search paths                                |        |         |
-| Set DNS search paths                                 | :white_check_mark:       |         |
-| Get split DNS                                        | :white_check_mark:      |         |
-| Update split DNS                                     | :white_check_mark:       |         |
-| Set split DNS                                        | :white_check_mark:       |         |
-| **Keys**                                             |        |         |
-| List tailnet keys                                    | :white_check_mark:       |         |
-| Create an auth key or OAuth client                   | :white_check_mark:      |         |
-| Get key                                              | :white_check_mark:      |         |
-| Delete key                                           |        |         |
-| **Policy File**                                      |        |         |
-| Get policy file                                      | :white_check_mark:      |         |
-| Set policy file                                      |        |         |
-| Preview rule matches                                 |        |         |
-| Validate and test policy file                        |        |         |
-| **Device Posture**                                   |        |         |
-| List all posture integrations                        | :white_check_mark:        |         |
-| Create a posture integration                         | :white_check_mark:       |         |
-| Get a posture integration                            |        |         |
-| Update a posture integration                         | :white_check_mark:       |         |
-| Delete a posture integration                         |        |         |
-| **Users**                                            |        |         |
-| List users                                           | :white_check_mark:        |         |
-| Get a user                                           |        |         |
-| Update user role                                     | :white_check_mark:       |         |
-| Approve a user                                       | :white_check_mark:       |         |
-| Suspend a user                                       | :white_check_mark:       |         |
-| Restore a user                                       |        |         |
-| Delete a user                                        | :white_check_mark:        |         |
-| **Contacts**                                         |        |         |
-| Get contacts                                         | :white_check_mark:      |         |
-| Update contact                                       | :white_check_mark:       |         |
-| Resend verification email                            |        |         |
-| **Webhooks**                                         |        |         |
-| List webhooks                                        | :white_check_mark:       |         |
-| Create a webhook                                     | :white_check_mark:       |         |
-| Get webhook                                          | :white_check_mark:      |         |
-| Update webhook                                       |        |         |
-| Delete webhook                                       | :white_check_mark:        |         |
-| Test a webhook                                       |        |         |
-| Rotate webhook secret                                | :white_check_mark:       |         |
-| **TailnetSettings**                                  |        |         |
-| Get tailnet settings                                 | :white_check_mark:      |         |
-| Update tailnet settings                              | :white_check_mark:       |         |
+Below is the same coverage table with even-width columns for easier reading.
+
+| **API Area / Action**            | **Status** | **`tscli` Command**                                              |                              |             |
+| -------------------------------- | :--------: | ---------------------------------------------------------------- | ---------------------------- | ----------- |
+| **Devices**                      |            |                                                                  |                              |             |
+| List tailnet devices             |      ✅     | `tscli list devices`                                             |                              |             |
+| Get a device                     |      ✅     | `tscli get device --device <device>`                             |                              |             |
+| Delete a device                  |      ✅     | `tscli delete device --device <device>`                          |                              |             |
+| Expire a device key              |      ✅     | `tscli set expiry --device <device>`                             |                              |             |
+| List device routes               |      ✅     | `tscli list routes --device <device>`                            |                              |             |
+| Set device routes                |      ✅     | `tscli set routes --device <device> --route <cidr>`              |                              |             |
+| Authorize / de-authorize device  |      ✅     | `tscli set authorization --device <device> --approve=<bool>`     |                              |             |
+| Set device name                  |      ✅     | `tscli set name --device <device> --name <hostname>`             |                              |             |
+| Set device tags                  |      ✅     | `tscli set tags --device <device> --tag tag:<tag>`               |                              |             |
+| Rotate device key                |      ❌     | —                                                                |                              |             |
+| Set device IPv4 address          |      ✅     | `tscli set ip --device <device> --ip <ip>`                       |                              |             |
+| Get posture attributes           |      ✅     | `tscli get posture --device <device>`                            |                              |             |
+| Set custom posture attributes    |      ✅     | `tscli set posture --device <device> --key custom:x --value <v>` |                              |             |
+| Delete custom posture attributes |      ✅     | `tscli delete posture --device <device> --key custom:x`          |                              |             |
+| **Device Invites**               |            |                                                                  |                              |             |
+| List device invites              |      ✅     | `tscli list invites device --device <device>`                    |                              |             |
+| Create device invite             |      ✅     | `tscli create invite device --device <device> --email <email>`   |                              |             |
+| Get a device invite              |      ❌     | —                                                                |                              |             |
+| Delete a device invite           |      ✅     | `tscli delete invite device --id <invite-id>`                    |                              |             |
+| Resend / accept device invite    |      ❌     | —                                                                |                              |             |
+| **User Invites**                 |            |                                                                  |                              |             |
+| List user invites                |      ✅     | `tscli list invites user [--state …]`                            |                              |             |
+| Create user invite               |      ✅     | `tscli create invite user --email <email> [--role <role>]`       |                              |             |
+| Get a user invite                |      ❌     | —                                                                |                              |             |
+| Delete a user invite             |      ✅     | `tscli delete invite user --id <invite-id>`                      |                              |             |
+| Resend user invite               |      ❌     | —                                                                |                              |             |
+| **Logging**                      |            |                                                                  |                              |             |
+| List configuration audit logs    |      ✅     | `tscli get logs config --start <t> [--end <t>]`                  |                              |             |
+| List network flow logs           |      ✅     | `tscli get logs network --start <t> [--end <t>]`                 |                              |             |
+| Log-streaming endpoints          |      ❌     | —                                                                |                              |             |
+| **DNS**                          |            |                                                                  |                              |             |
+| List DNS nameservers             |      ✅     | `tscli list nameservers`                                         |                              |             |
+| Set DNS nameservers              |      ✅     | `tscli set nameservers --nameserver <ip> …`                      |                              |             |
+| Get DNS preferences              |      ✅     | `tscli get dns preferences`                                      |                              |             |
+| Set DNS preferences              |      ✅     | `tscli set dns preferences --magicdns=<bool>`                    |                              |             |
+| List DNS search paths            |      ✅     | `tscli list dns searchpaths`                                     |                              |             |
+| Set DNS search paths             |      ✅     | `tscli set dns searchpaths --searchpath <domain> …`              |                              |             |
+| Get split-DNS map                |      ✅     | `tscli get dns split`                                            |                              |             |
+| Patch split-DNS                  |      ✅     | `tscli set dns split --domain <d>=<ip,ip> …`                     |                              |             |
+| Replace split-DNS                |      ✅     | `tscli set dns split --replace --domain <d>=<ip>`                |                              |             |
+| **Keys**                         |            |                                                                  |                              |             |
+| List tailnet keys                |      ✅     | `tscli list keys`                                                |                              |             |
+| Create auth-key / OAuth client   |      ✅     | \`tscli create key --type authkey                                | oauthclient …\`              |             |
+| Get key                          |      ✅     | `tscli get key --key <id>`                                       |                              |             |
+| Delete / revoke key              |      ❌     | —                                                                |                              |             |
+| **Policy File**                  |            |                                                                  |                              |             |
+| Get policy file                  |      ✅     | `tscli get policy [--json]`                                      |                              |             |
+| Set policy file                  |      ✅     | `tscli set policy --file <acl.hujson>`                           |                              |             |
+| Preview rule matches             |      ✅     | \`tscli get policy preview --type user                           | ipport --value X \[--current | --file F]\` |
+| Validate / test policy           |      ❌     | —                                                                |                              |             |
+| **Posture Integrations**         |            |                                                                  |                              |             |
+| List integrations                |      ✅     | `tscli list posture-integrations`                                |                              |             |
+| Create integration               |      ✅     | `tscli create posture-integration --provider <p> …`              |                              |             |
+| Get integration                  |      ✅     | `tscli get posture-integration --id <id>`                        |                              |             |
+| Update integration               |      ✅     | `tscli set posture-integration --id <id> …`                      |                              |             |
+| Delete integration               |      ❌     | —                                                                |                              |             |
+| **Users**                        |            |                                                                  |                              |             |
+| List users                       |      ✅     | `tscli list users [--type …] [--role …]`                         |                              |             |
+| Get a user                       |      ✅     | `tscli get user --user <id>`                                     |                              |             |
+| Update user role                 |      ✅     | `tscli set user-role --user <id> --role <role>`                  |                              |             |
+| Approve / suspend / restore user |      ✅     | \`tscli set user-access --user <id> --approve                    | --suspend                    | --restore\` |
+| Delete a user                    |      ✅     | `tscli delete user --user <id>`                                  |                              |             |
+| **Contacts**                     |            |                                                                  |                              |             |
+| Get contacts                     |      ✅     | `tscli get contacts`                                             |                              |             |
+| Update contact                   |      ✅     | `tscli set contacts --contact <id> --email <e@x>`                |                              |             |
+| Resend verification              |      ❌     | —                                                                |                              |             |
+| **Webhooks**                     |            |                                                                  |                              |             |
+| List webhooks                    |      ✅     | `tscli list webhooks`                                            |                              |             |
+| Create webhook                   |      ✅     | `tscli create webhook --url <endpoint> …`                        |                              |             |
+| Get webhook                      |      ✅     | `tscli get webhook --webhook <id>`                               |                              |             |
+| Update webhook                   |      ✅     | `tscli set webhook --webhook <id> …`                             |                              |             |
+| Delete webhook                   |      ✅     | `tscli delete webhook --webhook <id>`                            |                              |             |
+| Test / rotate webhook            |      ✅     | `tscli rotate webhook --webhook <id>`                            |                              |             |
+| **Tailnet Settings**             |            |                                                                  |                              |             |
+| Get tailnet settings             |      ✅     | `tscli get settings`                                             |                              |             |
+| Update tailnet settings          |      ✅     | `tscli set settings --devices-approval …`                        |                              |             |
+
+> **Legend** – ✅ implemented ❌ not yet implemented
+
 
 ### Quick examples
 
