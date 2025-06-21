@@ -115,19 +115,20 @@ tscli <noun> <verb> [flags]
 | **Device Invites**               |        |                 |
 | List device invites              | :white_check_mark: | `tscli list invites device --device <device>` |
 | Create device invite             | :white_check_mark: | `tscli create invite device --device <device> --email <email>` |
-| Get a device invite              | :x: | — |
+| Get a device invite              | :white_check_mark: | `tscli get invite device --id <invite-id>` |
 | Delete a device invite           | :white_check_mark: | `tscli delete invite device --id <invite-id>` |
 | Resend / accept device invite    | :x: | — |
 | **User Invites**                 |        |                 |
 | List user invites                | :white_check_mark: | `tscli list invites user [--state …]` |
 | Create user invite               | :white_check_mark: | `tscli create invite user --email <email> [--role <role>]` |
-| Get a user invite                | :x: | — |
+| Get a user invite                | :white_check_mark: | `tscli get user device --id <invite-id>` |
 | Delete a user invite             | :white_check_mark: | `tscli delete invite user --id <invite-id>` |
 | Resend user invite               | :x: | — |
 | **Logging**                      |        |                 |
 | List configuration audit logs    | :white_check_mark: | `tscli list logs config --start <t> [--end <t>]` |
 | List network flow logs           | :white_check_mark: | `tscli list logs network --start <t> [--end <t>]` |
-| Log-streaming endpoints          | :x: | — |
+| Get log-streaming configuration  | :white_check_mark: | `tscli get logs stream --type {configuration|network}` |
+| Get log-streaming status         | :white_check_mark: | `tscli get logs stream --type {configuration|network} --status` |
 | **DNS**                          |        |                 |
 | List DNS nameservers             | :white_check_mark: | `tscli list nameservers` |
 | Set DNS nameservers              | :white_check_mark: | `tscli set nameservers --nameserver <ip> …` |
@@ -153,7 +154,7 @@ tscli <noun> <verb> [flags]
 | Create integration               | :white_check_mark: | `tscli create posture-integration --provider <p> …` |
 | Get integration                  | :white_check_mark: | `tscli get posture-integration --id <id>` |
 | Update integration               | :white_check_mark: | `tscli set posture-integration --id <id> …` |
-| Delete integration               | :x: | — |
+| Delete integration               | :white_check_mark: | `tscli delete posture-integration --id <id>` |
 | **Users**                        |        |                 |
 | List users                       | :white_check_mark: | `tscli list users [--type …] [--role …]` |
 | Get a user                       | :white_check_mark: | `tscli get user --user <id>` |

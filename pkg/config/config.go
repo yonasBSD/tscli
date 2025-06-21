@@ -24,7 +24,7 @@ func Init() {
 	}
 
 	_ = v.ReadInConfig() // ignore “not found”
-	v.SetDefault("format", "json")
+	v.SetDefault("output", "json")
 }
 
 func Save() error {
