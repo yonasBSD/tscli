@@ -1,8 +1,8 @@
 package logs
 
 import (
-	"github.com/jaxxstorm/tscli/cmd/tscli/get/logs/config"
-	"github.com/jaxxstorm/tscli/cmd/tscli/get/logs/network"
+	"github.com/jaxxstorm/tscli/cmd/tscli/list/logs/config"
+	"github.com/jaxxstorm/tscli/cmd/tscli/list/logs/network"
 	"github.com/spf13/cobra"
 )
 

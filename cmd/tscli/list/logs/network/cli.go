@@ -1,13 +1,13 @@
-// cmd/tscli/get/logs/config/cli.go
+// cmd/tscli/list/logs/network/cli.go
 //
-// Fetch configuration-audit logs.
+// Fetch network-audit logs.
 //
-//	# Last 12 h
-//	tscli get logs config --start 12h
+//	# The last 30 minutes
+//	tscli list logs network --start 30m
 //
-//	# Specific window
-//	tscli get logs config -s 2025-05-01T00:00:00Z -e 2025-05-01T23:59:59Z
-package config
+//	# A specific day
+//	tscli list logs network -s 2024-05-01T00:00:00Z -e 2024-05-01T23:59:59Z
+package network
 
 import (
 	"context"
@@ -16,15 +16,15 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-
-	tstime "github.com/jaxxstorm/tscli/pkg/time"
 	"time"
 
 	"github.com/jaxxstorm/tscli/pkg/output"
+	tstime "github.com/jaxxstorm/tscli/pkg/time"
 	"github.com/jaxxstorm/tscli/pkg/tscli"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
+
 
 func Command() *cobra.Command {
 	var (
@@ -33,14 +33,15 @@ func Command() *cobra.Command {
 	)
 
 	cmd := &cobra.Command{
-		Use:   "config",
-		Short: "Get configuration-audit logs for the tailnet",
-		Long:  "Fetch audit-log entries for a given period. --start accepts RFC3339 *or* a relative offset such as 30d, 6h, 90m.",
+		Use:   "network",
+		Short: "Get network audit logs for the tailnet",
+		Long:  "Fetch audit log entries for a given period. --start accepts RFC3339 or a relative offset like 30d, 12h, 45m.",
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			start, err := tstime.ParseTime(startFlag, true)
 			if err != nil {
 				return fmt.Errorf("invalid --start: %w", err)
 			}
+
 			end, err := tstime.ParseTime(endFlag, true)
 			if err != nil {
 				return fmt.Errorf("invalid --end: %w", err)
@@ -54,7 +55,7 @@ func Command() *cobra.Command {
 				return err
 			}
 
-			path := "/tailnet/{tailnet}/logging/configuration"
+			path := "/tailnet/{tailnet}/logging/network"
 			q := url.Values{}
 			q.Set("start", start.Format(time.RFC3339))
 			q.Set("end", end.Format(time.RFC3339))
@@ -72,11 +73,10 @@ func Command() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&startFlag, "start", "s", "",
-		`Start time (RFC3339 or relative like "24h", "30d12h"). Required.`)
+	cmd.Flags().StringVarP(&startFlag, "start", "s", "90m",
+		`RFC3339 timestamp *or* relative offset (e.g. "30d", "90m"). Required.`)
 	cmd.Flags().StringVarP(&endFlag, "end", "e", "",
-		`End time in RFC3339. Defaults to “now”.`)
+		`RFC3339 timestamp. Defaults to the current time.`)
 
-	_ = cmd.MarkFlagRequired("start")
 	return cmd
 }

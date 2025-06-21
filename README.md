@@ -125,8 +125,8 @@ tscli <noun> <verb> [flags]
 | Delete a user invite             | :white_check_mark: | `tscli delete invite user --id <invite-id>` |
 | Resend user invite               | :x: | — |
 | **Logging**                      |        |                 |
-| List configuration audit logs    | :white_check_mark: | `tscli get logs config --start <t> [--end <t>]` |
-| List network flow logs           | :white_check_mark: | `tscli get logs network --start <t> [--end <t>]` |
+| List configuration audit logs    | :white_check_mark: | `tscli list logs config --start <t> [--end <t>]` |
+| List network flow logs           | :white_check_mark: | `tscli list logs network --start <t> [--end <t>]` |
 | Log-streaming endpoints          | :x: | — |
 | **DNS**                          |        |                 |
 | List DNS nameservers             | :white_check_mark: | `tscli list nameservers` |
