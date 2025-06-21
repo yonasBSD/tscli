@@ -116,8 +116,8 @@ func Command() *cobra.Command {
 				"result": fmt.Sprintf("device %s: %s set to %v", deviceFlag, keyFlag, parsedValue),
 			}
 			out, _ := json.MarshalIndent(payload, "", "  ")
-			format := viper.GetString("format")
-			output.Print(format, out)
+			outputType := viper.GetString("output")
+			output.Print(outputType, out)
 			return nil
 		},
 	}

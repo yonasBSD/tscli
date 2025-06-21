@@ -119,8 +119,8 @@ func Command() *cobra.Command {
 				return fmt.Errorf("create oauth client: %w", err)
 			}
 			out, _ := json.MarshalIndent(key, "", "  ")
-			format := viper.GetString("format")
-			output.Print(format, out)
+			outputType := viper.GetString("output")
+			output.Print(outputType, out)
 			return nil
 		},
 	}

@@ -53,8 +53,8 @@ func Command() *cobra.Command {
 				"device": deviceID,
 				"tags":   tags,
 			}, "", "  ")
-			format := viper.GetString("format")
-			output.Print(format, out)
+			outputType := viper.GetString("output")
+			output.Print(outputType, out)
 			return nil
 		},
 	}

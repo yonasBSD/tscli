@@ -77,7 +77,7 @@ tscli --version
 # ~/.tscli/.tscli.yaml
 api-key: tskey-abc123…
 tailnet: example.com
-format: pretty # other options are: human, json or yaml
+output: pretty # other options are: human, json or yaml
 ```
 
 ## 🚀 Usage

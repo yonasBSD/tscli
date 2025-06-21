@@ -8,6 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+
 	"github.com/jaxxstorm/tscli/pkg/output"
 
 	"github.com/jaxxstorm/tscli/pkg/tscli"
@@ -36,8 +37,8 @@ func Command() *cobra.Command {
 			if err != nil {
 				return fmt.Errorf("failed to marshal settings: %w", err)
 			}
-			format := viper.GetString("format")
-			output.Print(format, out)
+			outputType := viper.GetString("output")
+			output.Print(outputType, out)
 			return nil
 		},
 	}

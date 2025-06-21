@@ -109,8 +109,8 @@ func Command() *cobra.Command {
 			}
 
 			out, _ := json.MarshalIndent(dv, "", "  ")
-			format := viper.GetString("format")
-			output.Print(format, out)
+			outputType := viper.GetString("output")
+			output.Print(outputType, out)
 			return nil
 		},
 	}

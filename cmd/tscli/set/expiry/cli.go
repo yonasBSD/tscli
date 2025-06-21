@@ -43,8 +43,8 @@ func Command() *cobra.Command {
 			// Print a simple JSON confirmation to stdout.
 			payload := map[string]string{"result": fmt.Sprintf("device %s expired", deviceID)}
 			out, _ := json.MarshalIndent(payload, "", "  ")
-			format := viper.GetString("format")
-			output.Print(format, out)
+			outputType := viper.GetString("output")
+			output.Print(outputType, out)
 			return nil
 		},
 	}
