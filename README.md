@@ -101,27 +101,27 @@ tscli <noun> <verb> [flags]
 | API Area / Action                                    | Status | Command |
 | ---------------------------------------------------- | ------ | ------- |
 | **Devices**                                          |        |         |
-| List tailnet devices                                 | :white_check_mark:        |         |
-| Get a device                                         | :white_check_mark:     |         |
-| Delete a device                                      | :white_check_mark:        |         |
-| Expire a device's key                                | :white_check_mark:       |         |
-| List device routes                                   | :white_check_mark:        |         |
-| Set device routes                                    | :white_check_mark:       |         |
-| Authorize device                                     | :white_check_mark:        |         |
-| Set device name                                      |        |         |
-| Set device tags                                      | :white_check_mark:        |         |
-| Update device key                                    |        |         |
-| Set device IPv4 address                              | :white_check_mark:       |         |
-| Get device posture attributes                        | :white_check_mark:       |         |
-| Set custom device posture attributes                 | :white_check_mark:       |         |
-| Delete custom device posture attributes              | :white_check_mark:        |         |
+| List tailnet devices                                 | :white_check_mark: | `tscli list devices` |
+| Get a device                                         | :white_check_mark: | `tscli get device --device <device>`|
+| Delete a device                                      | :white_check_mark: | `tscli delete device --device <device>`|
+| Expire a device's key                                | :white_check_mark: |         |
+| List device routes                                   | :white_check_mark: | `tscli list routes --device <device>` |
+| Set device routes                                    | :white_check_mark: | `tscli set route --device <device> --route <cidr>`|
+| Authorize device                                     | :white_check_mark: | `tscli set authorization --device <device_id> --approve=true`|
+| Set device name                                      |   :x:     |         |
+| Set device tags                                      | :white_check_mark: | `tscli set tags --device <device_id> --tag "tag:foo" --tag "tag:bar"`|
+| Update device key                                    |   :x:     |         |
+| Set device IPv4 address                              | :white_check_mark: | `tscli set ip --device <device> --ip <ip>`         |
+| Get device posture attributes                        | :white_check_mark: | `tscli get posture --device <device>` |
+| Set custom device posture attributes                 | :white_check_mark: | `tscli set posture --device <device> --key custom:foo --value bar` |
+| Delete custom device posture attributes              | :white_check_mark: | `tscli delete posture --device <device> --key custom:foo`|
 | **Device Invites**                                   |        |         |
-| List device invites                                  | :white_check_mark:       |         |
-| Create device invites                                | :white_check_mark:      |         |
-| Get a device invite                                  |        |         |
-| Delete a device invite                               | :white_check_mark:        |         |
-| Resend a device invite                               |        |         |
-| Accept a device invite                               |        |         |
+| List device invites                                  | :white_check_mark: | `tscli list invites device --device <device>` |
+| Create device invites                                | :white_check_mark: | `tscli create invite device --device <device>`|
+| Get a device invite                                  |     :x:            |         |
+| Delete a device invite                               | :white_check_mark: | `tscli delete invite device --id <invite-id>`         |
+| Resend a device invite                               |     :x:            |         |
+| Accept a device invite                               |     :x:           |         |
 | **User Invites**                                      |        |         |
 | List user invites                                    | :white_check_mark:        |         |
 | Create user invites                                  | :white_check_mark:       |         |
