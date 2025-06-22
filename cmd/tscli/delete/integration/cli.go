@@ -1,7 +1,7 @@
 // cmd/tscli/delete/integration/cli.go
 //
 // `tscli delete posture-integration --id <integration-id>`
-// Fetch a single device-posture integration by its identifier.
+// Delete a single device-posture integration by its identifier.
 package postureintegration
 
 import (
