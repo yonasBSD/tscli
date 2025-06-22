@@ -121,7 +121,7 @@ tscli <noun> <verb> [flags]
 | **User Invites**                 |        |                 |
 | List user invites                | :white_check_mark: | `tscli list invites user [--state …]` |
 | Create user invite               | :white_check_mark: | `tscli create invite user --email <email> [--role <role>]` |
-| Get a user invite                | :white_check_mark: | `tscli get user device --id <invite-id>` |
+| Get a user invite                | :white_check_mark: | `tscli get invite user --id <invite-id>` |
 | Delete a user invite             | :white_check_mark: | `tscli delete invite user --id <invite-id>` |
 | Resend user invite               | :x: | — |
 | **Logging**                      |        |                 |
