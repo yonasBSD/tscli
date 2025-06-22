@@ -59,8 +59,8 @@ func Command() *cobra.Command {
 				return fmt.Errorf("update failed: %w", err)
 			}
 			pretty, _ := json.MarshalIndent(resp, "", "  ")
-			format := viper.GetString("format")
-			output.Print(format, pretty)
+			outputType := viper.GetString("output")
+			output.Print(outputType, pretty)
 			return nil
 		},
 	}

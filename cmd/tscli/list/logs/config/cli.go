@@ -68,7 +68,7 @@ func Command() *cobra.Command {
 				return err
 			}
 
-			return output.Print(viper.GetString("format"), raw)
+			return output.Print(viper.GetString("output"), raw)
 		},
 	}
 

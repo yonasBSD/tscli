@@ -4,7 +4,9 @@ import (
 	"github.com/jaxxstorm/tscli/cmd/tscli/get/contacts"
 	"github.com/jaxxstorm/tscli/cmd/tscli/get/device"
 	"github.com/jaxxstorm/tscli/cmd/tscli/get/dns"
+	"github.com/jaxxstorm/tscli/cmd/tscli/get/invite"
 	"github.com/jaxxstorm/tscli/cmd/tscli/get/key"
+	"github.com/jaxxstorm/tscli/cmd/tscli/get/logs"
 	"github.com/jaxxstorm/tscli/cmd/tscli/get/policy"
 	"github.com/jaxxstorm/tscli/cmd/tscli/get/posture"
 	"github.com/jaxxstorm/tscli/cmd/tscli/get/settings"
@@ -30,6 +32,8 @@ func Command() *cobra.Command {
 	command.AddCommand(settings.Command())
 	command.AddCommand(contacts.Command())
 	command.AddCommand(dns.Command())
+	command.AddCommand(invite.Command())
+	command.AddCommand(logs.Command())
 
 	return command
 }
