@@ -143,6 +143,7 @@ tscli <noun> <verb> [flags]
 | List tailnet keys                | :white_check_mark: | `tscli list keys` |
 | Create auth-key / OAuth client   | :white_check_mark: | `tscli create key --type authkey --oauthclient …` |
 | Get key                          | :white_check_mark: | `tscli get key --key <id>` |
+| Create a token                   | :white_check_mark: | `create token --client-id <oauth-client-id> --client-secret <oauth-client-secret>` |
 | Delete / revoke key              | :x: | — |
 | **Policy File**                  |        |                 |
 | Get policy file                  | :white_check_mark: | `tscli get policy [--json]` |
