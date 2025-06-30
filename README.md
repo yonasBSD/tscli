@@ -48,10 +48,19 @@ nix shell github:jaxxstorm/tscli
 Pre-built archives for **macOS, Linux, Windows (x86-64 / arm64)** are published on every release:
 
 ```bash
-# example for Linux amd64
-curl -sSfL \
-  https://github.com/jaxxstorm/tscli/releases/latest/download/tscli_$(uname -s)_$(uname -m).tar.gz \
-  | sudo tar -xz -C /usr/local/bin tscli
+# install the newest tscli (Linux/macOS, amd64/arm64)
+OS=$(uname -s | tr '[:upper:]' '[:lower:]')
+ARCH=$(uname -m)
+case $ARCH in
+  x86_64) ARCH=amd64 ;;
+  aarch64|arm64) ARCH=arm64 ;;
+esac
+
+curl -sSL "$(curl -sSL \
+  https://api.github.com/repos/jaxxstorm/tscli/releases/latest \
+  | grep -oE "https.*tscli_.*_${OS}_${ARCH}\.tar\.gz" \
+  | head -n1)" \
+| sudo tar -xz -C /usr/local/bin tscli
 ```
 
 #### Go install (always builds from HEAD)
