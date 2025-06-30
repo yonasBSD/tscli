@@ -5,6 +5,7 @@ import (
 	"github.com/jaxxstorm/tscli/cmd/tscli/create/invite"
 	"github.com/jaxxstorm/tscli/cmd/tscli/create/key"
 	"github.com/jaxxstorm/tscli/cmd/tscli/create/webhook"
+	"github.com/jaxxstorm/tscli/cmd/tscli/create/token"
 	"github.com/spf13/cobra"
 )
 
@@ -19,6 +20,7 @@ func Command() *cobra.Command {
 	command.AddCommand(key.Command())
 	command.AddCommand(webhook.Command())
 	command.AddCommand(invite.Command())
+	command.AddCommand(token.Command())
 
 	return command
 }
