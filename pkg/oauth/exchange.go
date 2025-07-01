@@ -2,53 +2,49 @@ package oauth
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"io"
-	"net/http"
-	"net/url"
-	"strings"
+	"time"
+
+	"golang.org/x/oauth2/clientcredentials"
 )
 
 // TokenResponse represents the response from the OAuth token exchange
 type TokenResponse struct {
-	AccessToken string `json:"access_token"`
-	TokenType   string `json:"token_type"`
-	ExpiresIn   int    `json:"expires_in"`
+	AccessToken string    `json:"access_token"`
+	TokenType   string    `json:"token_type"`
+	ExpiresIn   int       `json:"expires_in"`
+	ExpiresAt   time.Time `json:"expires_at"`
 }
 
 // ExchangeClientCredentials exchanges OAuth client credentials for an access token
 func ExchangeClientCredentials(ctx context.Context, clientID, clientSecret string) (*TokenResponse, error) {
-	tokenURL := "https://api.tailscale.com/api/v2/oauth/token"
-
-	data := url.Values{}
-	data.Set("grant_type", "client_credentials")
-	data.Set("client_id", clientID)
-	data.Set("client_secret", clientSecret)
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, tokenURL, strings.NewReader(data.Encode()))
-	if err != nil {
-		return nil, fmt.Errorf("failed to create request: %w", err)
+	config := &clientcredentials.Config{
+		ClientID:     clientID,
+		ClientSecret: clientSecret,
+		TokenURL:     "https://api.tailscale.com/api/v2/oauth/token",
 	}
 
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
+	token, err := config.Token(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to exchange credentials: %w", err)
 	}
-	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
-		body, _ := io.ReadAll(resp.Body)
-		return nil, fmt.Errorf("token exchange failed with status %d: %s", resp.StatusCode, string(body))
+	// Convert oauth2.Token to our TokenResponse format
+	expiresIn := 0
+	expiresAt := time.Time{}
+	if !token.Expiry.IsZero() {
+		expiresIn = int(time.Until(token.Expiry).Seconds())
+		// Ensure we don't return negative values if token is already expired
+		if expiresIn < 0 {
+			expiresIn = 0
+		}
+		expiresAt = token.Expiry
 	}
 
-	var tokenResp TokenResponse
-	if err := json.NewDecoder(resp.Body).Decode(&tokenResp); err != nil {
-		return nil, fmt.Errorf("failed to decode token response: %w", err)
-	}
-
-	return &tokenResp, nil
+	return &TokenResponse{
+		AccessToken: token.AccessToken,
+		TokenType:   token.TokenType,
+		ExpiresIn:   expiresIn,
+		ExpiresAt:   expiresAt,
+	}, nil
 }
