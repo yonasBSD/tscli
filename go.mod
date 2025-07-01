@@ -6,11 +6,12 @@ toolchain go1.24.4
 
 require (
 	github.com/charmbracelet/lipgloss v1.1.0
-	github.com/jaxxstorm/vers v0.0.0-20250701044105-e3c5a13decb4
+	github.com/jaxxstorm/vers v0.0.3
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/pflag v1.0.6
 	github.com/spf13/viper v1.20.1
 	github.com/tailscale/hujson v0.0.0-20250605163823-992244df8c5a
+	golang.org/x/oauth2 v0.30.0
 	golang.org/x/term v0.32.0
 	gopkg.in/yaml.v3 v3.0.1
 	tailscale.com/client/tailscale/v2 v2.0.0-20250616154411-35b8e02bd63e
@@ -58,7 +59,6 @@ require (
 	go.uber.org/multierr v1.9.0 // indirect
 	golang.org/x/crypto v0.37.0 // indirect
 	golang.org/x/net v0.39.0 // indirect
-	golang.org/x/oauth2 v0.30.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
 	golang.org/x/text v0.24.0 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
