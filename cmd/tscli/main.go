@@ -67,7 +67,7 @@ func configureCLI() *cobra.Command {
 		"",
 		"Tailscale API key")
 	root.PersistentFlags().StringVarP(
-		&outputType, "output", "f", "",
+		&outputType, "output", "o", "",
 		fmt.Sprintf("Output: %v", output.Available()),
 	)
 	root.PersistentFlags().StringVarP(&tailnet, "tailnet", "n", v.GetString("tailnet"), "Tailscale tailnet")

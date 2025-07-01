@@ -4,8 +4,8 @@ import (
 	"github.com/jaxxstorm/tscli/cmd/tscli/create/integration"
 	"github.com/jaxxstorm/tscli/cmd/tscli/create/invite"
 	"github.com/jaxxstorm/tscli/cmd/tscli/create/key"
-	"github.com/jaxxstorm/tscli/cmd/tscli/create/webhook"
 	"github.com/jaxxstorm/tscli/cmd/tscli/create/token"
+	"github.com/jaxxstorm/tscli/cmd/tscli/create/webhook"
 	"github.com/spf13/cobra"
 )
 
