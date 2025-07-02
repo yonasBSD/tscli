@@ -1,4 +1,4 @@
-// cmd/tscli/set/tags/cli.go
+// cmd/tscli/set/device/tags/cli.go
 
 package tags
 
@@ -29,7 +29,7 @@ func Command() *cobra.Command {
 		PersistentPreRunE: func(cmd *cobra.Command, _ []string) error {
 			for _, t := range tags {
 				if !tagRe.MatchString(t) {
-					return fmt.Errorf("invalid tag %q: must match tag:<name> and contain only letters, numbers, dashes, or underscores", t)
+					return fmt.Errorf("invalid tag %q: must match tag:<n> and contain only letters, numbers, dashes, or underscores", t)
 				}
 			}
 			return nil

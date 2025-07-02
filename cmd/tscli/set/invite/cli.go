@@ -4,6 +4,7 @@ package invite
 
 import (
 	"github.com/jaxxstorm/tscli/cmd/tscli/set/invite/device"
+	"github.com/jaxxstorm/tscli/cmd/tscli/set/invite/user"
 	"github.com/spf13/cobra"
 )
 
@@ -15,6 +16,7 @@ func Command() *cobra.Command {
 	}
 
 	command.AddCommand(device.Command())
+	command.AddCommand(user.Command())
 
 	return command
 }

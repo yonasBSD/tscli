@@ -1,4 +1,4 @@
-// cmd/tscli/set/name/cli.go
+// cmd/tscli/set/device/name/cli.go
 
 package name
 

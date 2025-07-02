@@ -1,6 +1,6 @@
-// cmd/tscli/set/routes/command.go
+// cmd/tscli/set/device/routes/cli.go
 //
-// `tscli devices routes --device <id> --route 10.0.0.0/24 --route 192.168.1.0/24`
+// `tscli set device routes --device <id> --route 10.0.0.0/24 --route 192.168.1.0/24`
 // Replaces the enabled subnet-routes list on the device.
 
 package routes
@@ -33,7 +33,7 @@ func Command() *cobra.Command {
 Examples
 
   # Replace with two CIDRs
-  tscli devices routes --device node-abc123 \
+  tscli set device routes --device node-abc123 \
       --route 10.0.0.0/24 --route 192.168.1.0/24
 `,
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
