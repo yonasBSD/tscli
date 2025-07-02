@@ -166,7 +166,7 @@ tscli <noun> <verb> [flags]
 | Create device invite             | :white_check_mark: | `tscli create invite device --device <device> --email <email>` |
 | Get a device invite              | :white_check_mark: | `tscli get invite device --id <invite-id>` |
 | Delete a device invite           | :white_check_mark: | `tscli delete invite device --id <invite-id>` |
-| Resend / accept device invite    | :x: | — |
+| Resend / accept device invite    | :white_check_mark: | `tscli set invite device --id <invite-id> --status <resend\|accept>` |
 | **Posture Integrations**         |        |                 |
 | List integrations                | :white_check_mark: | `tscli list posture-integrations` |
 | Create integration               | :white_check_mark: | `tscli create posture-integration --provider <p> …` |
