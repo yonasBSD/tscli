@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"strings"
 
 	"github.com/jaxxstorm/tscli/pkg/output"
@@ -25,15 +26,16 @@ func Command() *cobra.Command {
 	var (
 		typeStr string
 		email   string
+		resend  bool
 	)
 
 	cmd := &cobra.Command{
 		Use:   "contact",
-		Short: "Update a contact record in the Tailscale API",
-		Long:  "Allowed types: primary | billing | security.  Currently only the email field is writable.",
+		Short: "Update a contact record or resend verification email",
+		Long:  "Update contact info or resend verification email. Allowed types: primary | billing | security. Use --resend to send verification email for a contact type.",
 		PersistentPreRunE: func(cmd *cobra.Command, _ []string) error {
-			if email == "" {
-				return fmt.Errorf("--email is required")
+			if !resend && email == "" {
+				return fmt.Errorf("--email is required when not using --resend")
 			}
 			if _, ok := validTypes[strings.ToLower(typeStr)]; !ok {
 				return fmt.Errorf("invalid --type: %s (primary|billing|security)", typeStr)
@@ -46,6 +48,32 @@ func Command() *cobra.Command {
 				return err
 			}
 
+			if resend {
+				// Resend verification email
+				ctype := validTypes[strings.ToLower(typeStr)]
+				endpoint := fmt.Sprintf("/contacts/%s/resend-verification-email", string(ctype))
+				
+				if _, err := tscli.Do(
+					context.Background(),
+					client,
+					http.MethodPost,
+					endpoint,
+					nil, // no request body
+					nil, // no response body expected
+				); err != nil {
+					return fmt.Errorf("failed to resend verification email for %s contact: %w", typeStr, err)
+				}
+
+				out, _ := json.MarshalIndent(map[string]string{
+					"result": "verification email sent",
+					"type":   strings.ToLower(typeStr),
+				}, "", "  ")
+				outputType := viper.GetString("output")
+				output.Print(outputType, out)
+				return nil
+			}
+
+			// Update contact email
 			req := tsapi.UpdateContactRequest{
 				Email: tsapi.PointerTo(email),
 			}
@@ -53,7 +81,7 @@ func Command() *cobra.Command {
 			ctype := validTypes[strings.ToLower(typeStr)]
 			if err := client.Contacts().Update(
 				context.Background(),
-				ctype, // only 2 args: ctx + type + request
+				ctype,
 				req,
 			); err != nil {
 				return fmt.Errorf("update failed: %w", err)
@@ -72,7 +100,7 @@ func Command() *cobra.Command {
 
 	cmd.Flags().StringVar(&typeStr, "type", "primary", "Contact type to update (primary|billing|security)")
 	cmd.Flags().StringVar(&email, "email", "", "New email address")
-	_ = cmd.MarkFlagRequired("email")
+	cmd.Flags().BoolVar(&resend, "resend", false, "Resend verification email for the contact type")
 
 	return cmd
 }

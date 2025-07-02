@@ -176,7 +176,7 @@ tscli <noun> <verb> [flags]
 | **Contacts**                     |        |                 |
 | Get contacts                     | :white_check_mark: | `tscli get contacts` |
 | Update contact                   | :white_check_mark: | `tscli set contacts --contact <id> --email <e@x>` |
-| Resend verification              | :x: | — |
+| Resend verification              | :white_check_mark: | `tscli set contact --type <type> --resend` |
 | **Webhooks**                     |        |                 |
 | List webhooks                    | :white_check_mark: | `tscli list webhooks` |
 | Create webhook                   | :white_check_mark: | `tscli create webhook --url <endpoint> …` |
