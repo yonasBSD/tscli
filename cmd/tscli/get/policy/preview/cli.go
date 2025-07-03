@@ -15,9 +15,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/jaxxstorm/tscli/pkg/output"
+	"github.com/spf13/viper"
 	"net/http"
 	"net/url"
-	"os"
 	"strings"
 
 	f "github.com/jaxxstorm/tscli/pkg/file"
@@ -99,7 +100,7 @@ func Command() *cobra.Command {
 			}
 
 			path := fmt.Sprintf(
-				"/tailnet/{tailnet}/acl/preview/matches?type=%s&previewFor=%s",
+				"/tailnet/{tailnet}/acl/preview?type=%s&previewFor=%s",
 				kind, urlQueryEscape(value),
 			)
 
@@ -116,7 +117,8 @@ func Command() *cobra.Command {
 			}
 
 			out, _ := json.MarshalIndent(resp, "", "  ")
-			fmt.Fprintln(os.Stdout, string(out))
+			outputType := viper.GetString("output")
+			output.Print(outputType, out)
 			return nil
 		},
 	}

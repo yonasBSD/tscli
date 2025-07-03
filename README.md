@@ -125,7 +125,7 @@ tscli <noun> <verb> [flags]
 | Get policy file                  | :white_check_mark: | `tscli get policy [--json]` |
 | Set policy file                  | :white_check_mark: | `tscli set policy --file <acl.hujson>` |
 | Preview rule matches             | :white_check_mark: | `tscli get policy preview --type user\|ipport --value … [--current\|--file F]` |
-| Validate / test policy           | :x: | — |
+| Validate / test policy           | :white_check_mark: | `tscli get policy validate --file <policy.json>` |
 | **Keys**                         |        |                 |
 | List tailnet keys                | :white_check_mark: | `tscli list keys` |
 | Create auth-key / OAuth client   | :white_check_mark: | `tscli create key --type authkey --oauthclient …` |

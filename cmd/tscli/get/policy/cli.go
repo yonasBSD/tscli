@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/jaxxstorm/tscli/cmd/tscli/get/policy/preview"
+	"github.com/jaxxstorm/tscli/cmd/tscli/get/policy/validate"
 
 	"github.com/jaxxstorm/tscli/pkg/tscli"
 	"github.com/spf13/cobra"
@@ -54,6 +55,7 @@ func Command() *cobra.Command {
 	}
 
 	cmd.AddCommand(preview.Command())
+	cmd.AddCommand(validate.Command())
 
 	cmd.Flags().BoolVar(&asJSON, "json", false, "Output the policy as canonical JSON instead of HUJSON")
 	return cmd
