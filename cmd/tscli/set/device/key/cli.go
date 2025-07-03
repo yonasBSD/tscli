@@ -24,9 +24,9 @@ type keyRequest struct {
 
 func Command() *cobra.Command {
 	var (
-		deviceID          string
-		disableExpiry     bool
-		enableExpiry      bool
+		deviceID      string
+		disableExpiry bool
+		enableExpiry  bool
 	)
 
 	cmd := &cobra.Command{
