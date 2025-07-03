@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/charmbracelet/fang"
 	configuration "github.com/jaxxstorm/tscli/cmd/tscli/config"
 	"github.com/jaxxstorm/tscli/cmd/tscli/create"
 	"github.com/jaxxstorm/tscli/cmd/tscli/delete"
@@ -18,7 +19,6 @@ import (
 	"github.com/jaxxstorm/tscli/pkg/contract"
 	"github.com/jaxxstorm/tscli/pkg/output"
 	pkgversion "github.com/jaxxstorm/tscli/pkg/version"
-	"github.com/charmbracelet/fang"
 	"github.com/spf13/cobra"
 	viper "github.com/spf13/viper"
 )
