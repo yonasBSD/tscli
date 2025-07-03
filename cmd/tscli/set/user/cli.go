@@ -2,6 +2,7 @@ package user
 
 import (
 	"github.com/jaxxstorm/tscli/cmd/tscli/set/user/access"
+	"github.com/jaxxstorm/tscli/cmd/tscli/set/user/invite"
 	"github.com/jaxxstorm/tscli/cmd/tscli/set/user/role"
 	"github.com/spf13/cobra"
 )
@@ -14,6 +15,7 @@ func Command() *cobra.Command {
 	}
 
 	command.AddCommand(access.Command())
+	command.AddCommand(invite.Command())
 	command.AddCommand(role.Command())
 
 	return command

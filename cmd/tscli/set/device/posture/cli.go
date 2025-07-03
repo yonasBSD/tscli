@@ -1,4 +1,4 @@
-// cmd/tscli/devices/posture/command.go
+// cmd/tscli/set/device/posture/cli.go
 
 package posture
 
@@ -47,50 +47,68 @@ func parseExpiry(exp string) (tsapi.Time, error) {
 }
 
 func Command() *cobra.Command {
+	var (
+		deviceID string
+		key      string
+		value    string
+		expiry   string
+		comment  string
+	)
 
 	var (
-		keyFlag     string
-		valFlag     string
-		expiryFlag  string
-		commentFlag string
-		deviceFlag  string
-
 		parsedValue any
 		parsedExp   tsapi.Time
 	)
 
-	command := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "posture",
-		Short: "Set a custom posture attribute on a device",
-		Long:  "Set (or update) a custom:<attr> posture attribute on the specified device.",
+		Short: "Set custom posture attributes on a device",
+		Long: `Set one or more custom posture attributes on a specific device.
 
-		// validate inputs for the command
+Examples:
+
+  # Set a string attribute
+  tscli set device posture --device node-abc123 --key custom:group --value production
+
+  # Set a boolean attribute  
+  tscli set device posture --device node-abc123 --key custom:compliant --value true
+
+  # Set an integer attribute
+  tscli set device posture --device node-abc123 --key custom:score --value 95
+
+  # Set an attribute with expiry
+  tscli set device posture --device node-abc123 --key custom:temp --value test --expiry 2024-12-31T23:59:59Z
+`,
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-			// key
-			if !keyRe.MatchString(keyFlag) {
-				return errors.New(`--key must start with "custom:" and contain only letters, numbers, underscores or colons (≤ 50 chars)`)
+			if deviceID == "" {
+				return fmt.Errorf("--device is required")
 			}
+			if key == "" {
+				return fmt.Errorf("--key is required")
+			}
+			if value == "" {
+				return fmt.Errorf("--value is required")
+			}
+			if !keyRe.MatchString(key) {
+				return fmt.Errorf(`invalid key %q: must match "custom:..." pattern`, key)
+			}
+
 			// value
-			v, err := coerceValue(valFlag)
+			val, err := coerceValue(value)
 			if err != nil {
-				return err
+				return fmt.Errorf("invalid --value: %w", err)
 			}
-			parsedValue = v
+			parsedValue = val
 
 			// expiry
-			exp, err := parseExpiry(expiryFlag)
+			exp, err := parseExpiry(expiry)
 			if err != nil {
 				return fmt.Errorf("invalid --expiry: %w", err)
 			}
 			parsedExp = exp
 
-			// device
-			if deviceFlag == "" {
-				return errors.New("--device is required")
-			}
 			return nil
 		},
-
 		RunE: func(cmd *cobra.Command, args []string) error {
 			client, err := tscli.New()
 			if err != nil {
@@ -100,20 +118,20 @@ func Command() *cobra.Command {
 			req := tsapi.DevicePostureAttributeRequest{
 				Value:   parsedValue,
 				Expiry:  parsedExp,
-				Comment: commentFlag,
+				Comment: comment,
 			}
 
 			if err := client.Devices().SetPostureAttribute(
 				context.Background(),
-				deviceFlag,
-				keyFlag,
+				deviceID,
+				key,
 				req,
 			); err != nil {
 				return fmt.Errorf("failed to set posture attribute: %w", err)
 			}
 
 			payload := map[string]string{
-				"result": fmt.Sprintf("device %s: %s set to %v", deviceFlag, keyFlag, parsedValue),
+				"result": fmt.Sprintf("device %s: %s set to %v", deviceID, key, parsedValue),
 			}
 			out, _ := json.MarshalIndent(payload, "", "  ")
 			outputType := viper.GetString("output")
@@ -122,15 +140,15 @@ func Command() *cobra.Command {
 		},
 	}
 
-	command.Flags().StringVar(&deviceFlag, "device", "", "Device ID to update")
-	command.Flags().StringVar(&keyFlag, "key", "", `Posture attribute key (must start with "custom:")`)
-	command.Flags().StringVar(&valFlag, "value", "", "Value to set (string, number, or boolean)")
-	command.Flags().StringVar(&expiryFlag, "expiry", "", `Optional RFC-3339 expiry time (e.g. "2025-01-02T15:04:05Z")`)
-	command.Flags().StringVar(&commentFlag, "comment", "", "Optional audit-log comment")
+	cmd.Flags().StringVar(&deviceID, "device", "", "Device ID")
+	cmd.Flags().StringVar(&key, "key", "", "Posture attribute key (must start with 'custom:')")
+	cmd.Flags().StringVar(&value, "value", "", "Posture attribute value")
+	cmd.Flags().StringVar(&expiry, "expiry", "", "Expiry time in RFC3339 format (optional)")
+	cmd.Flags().StringVar(&comment, "comment", "", "Optional audit-log comment")
 
-	_ = command.MarkFlagRequired("device")
-	_ = command.MarkFlagRequired("key")
-	_ = command.MarkFlagRequired("value")
+	_ = cmd.MarkFlagRequired("device")
+	_ = cmd.MarkFlagRequired("key")
+	_ = cmd.MarkFlagRequired("value")
 
-	return command
+	return cmd
 }

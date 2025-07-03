@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/jaxxstorm/tscli/cmd/tscli/delete/device/invite"
+	"github.com/jaxxstorm/tscli/cmd/tscli/delete/device/posture"
 	"github.com/jaxxstorm/tscli/pkg/output"
 
 	"github.com/jaxxstorm/tscli/pkg/tscli"
@@ -47,6 +49,10 @@ func Command() *cobra.Command {
 
 	command.Flags().String("device", "", `Device ID to get (nodeId "node-abc123" or numeric id). Example: --device=node-abcdef123456`)
 	_ = command.MarkFlagRequired("device")
+
+	// Add subcommands
+	command.AddCommand(invite.Command())
+	command.AddCommand(posture.Command())
 
 	return command
 }

@@ -1,6 +1,6 @@
-// cmd/tscli/set/ip/cli.go
+// cmd/tscli/set/device/ip/cli.go
 //
-// `tscli set ip --device <id> --ip 100.64.0.42`
+// `tscli set device ip --device <id> --ip 100.64.0.42`
 package ip
 
 import (
@@ -48,16 +48,18 @@ func Command() *cobra.Command {
 			}
 
 			out, _ := json.MarshalIndent(map[string]string{
-				"result": fmt.Sprintf("device %s IPv4 set to %s", deviceID, ipv4),
+				"result": fmt.Sprintf("device %s: IPv4 set to %s", deviceID, ipv4),
 			}, "", "  ")
+
 			outputType := viper.GetString("output")
 			output.Print(outputType, out)
 			return nil
 		},
 	}
 
-	cmd.Flags().StringVar(&deviceID, "device", "", "Device ID (nodeId or numeric id)")
-	cmd.Flags().StringVar(&ipv4, "ip", "", "New IPv4 address (e.g. 100.64.0.42)")
+	cmd.Flags().StringVar(&deviceID, "device", "", "Device ID")
+	cmd.Flags().StringVar(&ipv4, "ip", "", "IPv4 address to assign")
+
 	_ = cmd.MarkFlagRequired("device")
 	_ = cmd.MarkFlagRequired("ip")
 

@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/jaxxstorm/tscli/cmd/tscli/get/user/invite"
 	"github.com/jaxxstorm/tscli/pkg/output"
 
 	"github.com/jaxxstorm/tscli/pkg/tscli"
@@ -44,6 +45,9 @@ func Command() *cobra.Command {
 
 	cmd.Flags().StringVar(&userID, "user", "", "User ID (email or UID) to retrieve")
 	_ = cmd.MarkFlagRequired("user")
+
+	// Add subcommands
+	cmd.AddCommand(invite.Command())
 
 	return cmd
 }

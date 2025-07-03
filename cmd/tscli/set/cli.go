@@ -4,11 +4,7 @@ import (
 	"github.com/jaxxstorm/tscli/cmd/tscli/set/contact"
 	"github.com/jaxxstorm/tscli/cmd/tscli/set/device"
 	"github.com/jaxxstorm/tscli/cmd/tscli/set/dns"
-	"github.com/jaxxstorm/tscli/cmd/tscli/set/expiry"
 	postureintegration "github.com/jaxxstorm/tscli/cmd/tscli/set/integration"
-	"github.com/jaxxstorm/tscli/cmd/tscli/set/invite"
-	"github.com/jaxxstorm/tscli/cmd/tscli/set/ip"
-	"github.com/jaxxstorm/tscli/cmd/tscli/set/posture"
 	"github.com/jaxxstorm/tscli/cmd/tscli/set/settings"
 	"github.com/jaxxstorm/tscli/cmd/tscli/set/user"
 	"github.com/spf13/cobra"
@@ -22,14 +18,10 @@ func Command() *cobra.Command {
 	}
 
 	command.AddCommand(device.Command())
-	command.AddCommand(posture.Command())
-	command.AddCommand(ip.Command())
 	command.AddCommand(user.Command())
 	command.AddCommand(settings.Command())
 	command.AddCommand(contact.Command())
-	command.AddCommand(invite.Command())
 	command.AddCommand(postureintegration.Command())
-	command.AddCommand(expiry.Command())
 	command.AddCommand(dns.Command())
 	return command
 }

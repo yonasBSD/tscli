@@ -1,9 +1,5 @@
-// cmd/tscli/delete/user/cli.go
-//
-// `tscli delete user --user <id-or-email>`
-// Removes a user from the tailnet via DELETE /api/v2/user/{id}
-
-package user
+// cmd/tscli/delete/user/invite/cli.go
+package invite
 
 import (
 	"context"
@@ -11,7 +7,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/jaxxstorm/tscli/cmd/tscli/delete/user/invite"
 	"github.com/jaxxstorm/tscli/pkg/output"
 
 	"github.com/jaxxstorm/tscli/pkg/tscli"
@@ -19,44 +14,45 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Command registers:  tscli delete user invite --id <invite-id>
 func Command() *cobra.Command {
-	var userID string
+	var id string
 
 	cmd := &cobra.Command{
-		Use:   "user",
-		Short: "Delete a tailnet user",
+		Use:   "invite",
+		Short: "Delete a user invite",
 		RunE: func(cmd *cobra.Command, _ []string) error {
+
 			client, err := tscli.New()
 			if err != nil {
-				return fmt.Errorf("failed to create client: %w", err)
+				return err
 			}
 
 			if _, err := tscli.Do(
 				context.Background(),
 				client,
-				http.MethodPost,
-				"/user/"+userID,
+				http.MethodDelete,
+				fmt.Sprintf("/user-invites/%s", id),
 				nil,
 				nil,
 			); err != nil {
-				return fmt.Errorf("failed to delete user %s: %w", userID, err)
+				return fmt.Errorf("delete invite failed: %w", err)
 			}
 
 			resp := map[string]string{
-				"result": fmt.Sprintf("user %s deleted", userID),
+				"result": fmt.Sprintf("user invite %s: deleted", id),
 			}
+
 			out, _ := json.MarshalIndent(resp, "", "  ")
 			outputType := viper.GetString("output")
 			output.Print(outputType, out)
+
 			return nil
 		},
 	}
 
-	cmd.Flags().StringVar(&userID, "user", "", "User ID to delete")
-	_ = cmd.MarkFlagRequired("user")
-
-	// Add subcommands
-	cmd.AddCommand(invite.Command())
+	cmd.Flags().StringVar(&id, "id", "", "User invite ID to delete")
+	_ = cmd.MarkFlagRequired("id")
 
 	return cmd
 }

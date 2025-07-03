@@ -23,6 +23,8 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/jaxxstorm/tscli/cmd/tscli/get/device/invite"
+	"github.com/jaxxstorm/tscli/cmd/tscli/get/device/posture"
 	"github.com/jaxxstorm/tscli/pkg/output"
 	"github.com/jaxxstorm/tscli/pkg/tscli"
 	"github.com/spf13/cobra"
@@ -127,6 +129,10 @@ func Command() *cobra.Command {
 
 	cmd.Flags().StringVar(&devName, "name", "",
 		"Match by device hostname (case-insensitive).")
+
+	// Add subcommands
+	cmd.AddCommand(invite.Command())
+	cmd.AddCommand(posture.Command())
 
 	return cmd
 }

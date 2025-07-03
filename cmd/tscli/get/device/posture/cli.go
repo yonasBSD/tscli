@@ -1,6 +1,6 @@
-// cmd/tscli/get/posture/cli.go
+// cmd/tscli/get/device/posture/cli.go
 //
-// `tscli get posture --device <id>`
+// `tscli get device posture --device <id>`
 // Fetch the custom posture-attribute map for a device.
 
 package posture
@@ -26,7 +26,7 @@ func Command() *cobra.Command {
 
 Example
 
-  tscli get posture --device node-abcdef123456
+  tscli get device posture --device node-abcdef123456
 `,
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 			if deviceID == "" {
@@ -49,19 +49,14 @@ Example
 			if err != nil {
 				return fmt.Errorf("failed to marshal JSON: %w", err)
 			}
+
 			outputType := viper.GetString("output")
 			output.Print(outputType, out)
 			return nil
 		},
 	}
 
-	// ---------------- flags ----------------
-	cmd.Flags().StringVar(
-		&deviceID,
-		"device",
-		"",
-		`Device ID to query (nodeId "node-abc123" or numeric id). Example: --device node-abcdef123456`,
-	)
+	cmd.Flags().StringVar(&deviceID, "device", "", "Device ID")
 	_ = cmd.MarkFlagRequired("device")
 
 	return cmd

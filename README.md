@@ -110,17 +110,17 @@ tscli <noun> <verb> [flags]
 | List tailnet devices             | :white_check_mark: | `tscli list devices` |
 | Get a device                     | :white_check_mark: | `tscli get device --device <device>` |
 | Delete a device                  | :white_check_mark: | `tscli delete device --device <device>` |
-| Expire a device key              | :white_check_mark: | `tscli set expiry --device <device>` |
+| Expire a device key              | :white_check_mark: | `tscli set device expiry --device <device>` |
 | List device routes               | :white_check_mark: | `tscli list routes --device <device>` |
 | Set device routes                | :white_check_mark: | `tscli set device routes --device <device> --route <cidr>` |
 | Authorize / de-authorize device  | :white_check_mark: | `tscli set device authorization --device <device> --approve=<bool>` |
 | Set device name                  | :white_check_mark: | `tscli set device name --device <device> --name <hostname>` |
 | Set device tags                  | :white_check_mark: | `tscli set device tags --device <device> --tag tag:<tag>` |
 | Update a device key              | :white_check_mark: | `tscli set device key --device <device> --disable-expiry\|--enable-expiry` |
-| Set device IPv4 address          | :white_check_mark: | `tscli set ip --device <device> --ip <ip>` |
-| Get posture attributes           | :white_check_mark: | `tscli get posture --device <device>` |
-| Set custom posture attributes    | :white_check_mark: | `tscli set posture --device <device> --key custom:x --value <v>` |
-| Delete custom posture attributes | :white_check_mark: | `tscli delete posture --device <device> --key custom:x` |
+| Set device IPv4 address          | :white_check_mark: | `tscli set device ip --device <device> --ip <ip>` |
+| Get posture attributes           | :white_check_mark: | `tscli get device posture --device <device>` |
+| Set custom posture attributes    | :white_check_mark: | `tscli set device posture --device <device> --key custom:x --value <v>` |
+| Delete custom posture attributes | :white_check_mark: | `tscli delete device posture --device <device> --key custom:x` |
 | **Policy File**                  |        |                 |
 | Get policy file                  | :white_check_mark: | `tscli get policy [--json]` |
 | Set policy file                  | :white_check_mark: | `tscli set policy --file <acl.hujson>` |
@@ -158,15 +158,15 @@ tscli <noun> <verb> [flags]
 | **User Invites**                 |        |                 |
 | List user invites                | :white_check_mark: | `tscli list invites user [--state …]` |
 | Create user invite               | :white_check_mark: | `tscli create invite user --email <email> [--role <role>]` |
-| Get a user invite                | :white_check_mark: | `tscli get invite user --id <invite-id>` |
-| Delete a user invite             | :white_check_mark: | `tscli delete invite user --id <invite-id>` |
-| Resend user invite               | :white_check_mark: | `tscli set invite user --id <invite-id> --resend` |
+| Get a user invite                | :white_check_mark: | `tscli get user invite --id <invite-id>` |
+| Delete a user invite             | :white_check_mark: | `tscli delete user invite --id <invite-id>` |
+| Resend user invite               | :white_check_mark: | `tscli set user invite --id <invite-id> --resend` |
 | **Device Invites**               |        |                 |
 | List device invites              | :white_check_mark: | `tscli list invites device --device <device>` |
 | Create device invite             | :white_check_mark: | `tscli create invite device --device <device> --email <email>` |
-| Get a device invite              | :white_check_mark: | `tscli get invite device --id <invite-id>` |
-| Delete a device invite           | :white_check_mark: | `tscli delete invite device --id <invite-id>` |
-| Resend / accept device invite    | :white_check_mark: | `tscli set invite device --id <invite-id> --status <resend\|accept>` |
+| Get a device invite              | :white_check_mark: | `tscli get device invite --id <invite-id>` |
+| Delete a device invite           | :white_check_mark: | `tscli delete device invite --id <invite-id>` |
+| Resend / accept device invite    | :white_check_mark: | `tscli set device invite --id <invite-id> --status <resend\|accept>` |
 | **Posture Integrations**         |        |                 |
 | List integrations                | :white_check_mark: | `tscli list posture-integrations` |
 | Create integration               | :white_check_mark: | `tscli create posture-integration --provider <p> …` |
@@ -183,7 +183,7 @@ tscli <noun> <verb> [flags]
 | Get webhook                      | :white_check_mark: | `tscli get webhook --webhook <id>` |
 | Update webhook                   | :white_check_mark: | `tscli set webhook --webhook <id> …` |
 | Delete webhook                   | :white_check_mark: | `tscli delete webhook --webhook <id>` |
-| Test webhook                     | :white_check_mark: | `tscli test webhook` |
+| Test webhook                     | :white_check_mark: | `tscli get webhook test` |
 | Rotate webhook secret            | :white_check_mark: | `tscli rotate webhook --webhook <id>` |
 | **Tailnet Settings**             |        |                 |
 | Get tailnet settings             | :white_check_mark: | `tscli get settings` |

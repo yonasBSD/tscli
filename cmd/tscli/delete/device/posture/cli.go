@@ -1,6 +1,6 @@
-// cmd/tscli/devices/delete/posture/command.go
+// cmd/tscli/delete/device/posture/cli.go
 //
-// `tscli devices posture --device <id> --key custom:attr`
+// `tscli delete device posture --device <id> --key custom:attr`
 // Removes a custom posture attribute from a device.
 
 package posture
