@@ -73,7 +73,7 @@ func renderMap(m map[string]any, indent int) error {
 	for _, k := range keys {
 		keyCell := keyStyle.Width(keyWidth).Render(k + ":")
 
-		rawVal := fmtPretty(m[k], indent+keyWidth+padding)
+		rawVal := fmtPretty(m[k], 0) // Remove excessive indentation from fmtPretty
 
 		if strings.Contains(rawVal, "\n") {
 			// multiline value: key on its own line
@@ -95,7 +95,7 @@ func renderMap(m map[string]any, indent int) error {
 	return nil
 }
 
-func fmtPretty(v any, _ int) string {
+func fmtPretty(v any, indent int) string {
 	switch x := v.(type) {
 
 	case nil:
@@ -123,53 +123,123 @@ func fmtPretty(v any, _ int) string {
 		if len(x) == 0 {
 			return "[]"
 		}
-		/* inline small scalar arrays */
-		var parts []string
-		for _, el := range x {
-			switch el.(type) {
-			case string, json.Number, bool:
-				parts = append(parts, fmtPretty(el, 0))
-			default:
-				return fmt.Sprintf("[%d items]", len(x))
+
+		// Check if it's a simple scalar array that can be inlined
+		if len(x) <= maxInlineArray {
+			allScalars := true
+			var parts []string
+			totalLen := 2 // for brackets
+
+			for _, el := range x {
+				switch el.(type) {
+				case string, json.Number, bool, nil:
+					part := fmtPretty(el, 0)
+					parts = append(parts, part)
+					totalLen += len(part) + 2 // +2 for ", "
+				default:
+					allScalars = false
+				}
+				if !allScalars {
+					break
+				}
 			}
-			if len(parts) > maxInlineArray {
-				return fmt.Sprintf("[%d items]", len(x))
+
+			if allScalars && totalLen <= maxScalar {
+				return "[" + strings.Join(parts, ", ") + "]"
 			}
 		}
-		inline := "[" + strings.Join(parts, ", ") + "]"
-		if len(inline) > maxScalar {
-			return fmt.Sprintf("[%d items]", len(x))
+
+		// Render as multiline structure
+		var b strings.Builder
+		for i, el := range x {
+			if i > 0 {
+				b.WriteString("\n")
+			}
+
+			// Format the item with minimal additional indentation
+			formatted := fmtPretty(el, indent)
+
+			// If it's a multiline item, handle indentation properly
+			if strings.Contains(formatted, "\n") {
+				lines := strings.Split(formatted, "\n")
+				b.WriteString(lines[0])
+				for _, line := range lines[1:] {
+					if line != "" {
+						b.WriteString("\n")
+						b.WriteString(line)
+					}
+				}
+			} else {
+				b.WriteString(formatted)
+			}
 		}
-		return inline
+		return b.String()
 
 	case map[string]any:
 		if len(x) == 0 {
 			return "{}"
 		}
-		/* inline very small maps */
+
+		// Try inline for very small maps
 		if len(x) <= maxInlineKeys {
 			ks := mapsKeys(x)
 			slices.Sort(ks)
 			var pieces []string
-			total := 2
+			total := 2 // for braces
+			allScalars := true
+
 			for _, k := range ks {
-				p := k + ": " + fmtPretty(x[k], 0)
-				total += len(p) + 2
-				if total > maxScalar {
-					goto multiline
+				val := x[k]
+				switch val.(type) {
+				case string, json.Number, bool, nil:
+					p := k + ": " + fmtPretty(val, 0)
+					total += len(p) + 2
+					if total <= maxScalar {
+						pieces = append(pieces, p)
+					} else {
+						allScalars = false
+					}
+				default:
+					allScalars = false
 				}
-				pieces = append(pieces, p)
+				if !allScalars {
+					break
+				}
 			}
-			return "{" + strings.Join(pieces, ", ") + "}"
+
+			if allScalars && total <= maxScalar {
+				return "{" + strings.Join(pieces, ", ") + "}"
+			}
 		}
 
-	multiline:
+		// Render as multiline structure
 		var b strings.Builder
-		for _, k := range mapsKeys(x) {
+		keys := mapsKeys(x)
+		slices.Sort(keys)
+
+		for i, k := range keys {
+			if i > 0 {
+				b.WriteString("\n")
+			}
+
 			b.WriteString(k)
 			b.WriteString(": ")
-			b.WriteString(fmtPretty(x[k], 0))
-			b.WriteByte('\n')
+
+			val := fmtPretty(x[k], 0)
+
+			// Handle multiline values with consistent indentation
+			if strings.Contains(val, "\n") {
+				lines := strings.Split(val, "\n")
+				b.WriteString(lines[0])
+				for _, line := range lines[1:] {
+					if line != "" {
+						b.WriteString("\n  ")
+						b.WriteString(line)
+					}
+				}
+			} else {
+				b.WriteString(val)
+			}
 		}
 		return b.String()
 
