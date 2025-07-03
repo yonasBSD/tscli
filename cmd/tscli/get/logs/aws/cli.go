@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/jaxxstorm/tscli/cmd/tscli/get/logs/aws/validate"
 	"github.com/jaxxstorm/tscli/pkg/output"
 	"github.com/jaxxstorm/tscli/pkg/tscli"
 	"github.com/spf13/cobra"
@@ -62,6 +63,9 @@ This external ID is required when setting up AWS log streaming integration.`,
 			return nil
 		},
 	}
+
+	// Add subcommands
+	cmd.AddCommand(validate.Command())
 
 	return cmd
 }

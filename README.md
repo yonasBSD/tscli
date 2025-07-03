@@ -148,7 +148,7 @@ tscli <noun> <verb> [flags]
 | Get log-streaming status         | :white_check_mark: | `tscli get logs stream --type {configuration|network} --status` |
 | Get log-streaming configuration  | :white_check_mark: | `tscli get logs stream --type {configuration|network}` |
 | Create or get AWS external id.   | :white_check_mark: | `tscli get logs aws [--reusable]` |
-| Validate external ID integraton with IAM role trust policy | :x: | - |
+| Validate external ID integraton with IAM role trust policy | :white_check_mark: | `tscli get logs aws validate --external-id <id> --role-arn <arn>` |
 | **Users**                        |        |                 |
 | List users                       | :white_check_mark: | `tscli list users [--type …] [--role …]` |
 | Get a user                       | :white_check_mark: | `tscli get user --user <id>` |
