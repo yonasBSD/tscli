@@ -17,6 +17,7 @@ import (
 	"github.com/jaxxstorm/tscli/pkg/config"
 	"github.com/jaxxstorm/tscli/pkg/contract"
 	"github.com/jaxxstorm/tscli/pkg/output"
+	pkgversion "github.com/jaxxstorm/tscli/pkg/version"
 	"github.com/charmbracelet/fang"
 	"github.com/spf13/cobra"
 	viper "github.com/spf13/viper"
@@ -89,7 +90,7 @@ func configureCLI() *cobra.Command {
 }
 
 func main() {
-	if err := fang.Execute(context.Background(), configureCLI()); err != nil {
+	if err := fang.Execute(context.Background(), configureCLI(), fang.WithVersion(pkgversion.GetVersion())); err != nil {
 		contract.IgnoreIoError(fmt.Fprintf(os.Stderr, "%v\n", err))
 		os.Exit(1)
 	}
