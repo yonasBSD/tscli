@@ -183,7 +183,7 @@ tscli <noun> <verb> [flags]
 | Get webhook                      | :white_check_mark: | `tscli get webhook --webhook <id>` |
 | Update webhook                   | :white_check_mark: | `tscli set webhook --webhook <id> …` |
 | Delete webhook                   | :white_check_mark: | `tscli delete webhook --webhook <id>` |
-| Test webhook                     | :x: | - |
+| Test webhook                     | :white_check_mark: | `tscli test webhook` |
 | Rotate webhook secret            | :white_check_mark: | `tscli rotate webhook --webhook <id>` |
 | **Tailnet Settings**             |        |                 |
 | Get tailnet settings             | :white_check_mark: | `tscli get settings` |

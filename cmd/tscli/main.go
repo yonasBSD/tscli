@@ -12,7 +12,6 @@ import (
 	"github.com/jaxxstorm/tscli/cmd/tscli/delete"
 	"github.com/jaxxstorm/tscli/cmd/tscli/get"
 	"github.com/jaxxstorm/tscli/cmd/tscli/list"
-	"github.com/jaxxstorm/tscli/cmd/tscli/rotate"
 	"github.com/jaxxstorm/tscli/cmd/tscli/set"
 	"github.com/jaxxstorm/tscli/cmd/tscli/version"
 	"github.com/jaxxstorm/tscli/pkg/config"
@@ -62,7 +61,6 @@ func configureCLI() *cobra.Command {
 		create.Command(),
 		version.Command(),
 		configuration.Command(),
-		rotate.Command(),
 	)
 
 	root.PersistentFlags().StringVarP(&apiKey, "api-key", "k",

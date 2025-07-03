@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/jaxxstorm/tscli/cmd/tscli/get/webhook/test"
 	"github.com/jaxxstorm/tscli/pkg/output"
 
 	"github.com/jaxxstorm/tscli/pkg/tscli"
@@ -15,6 +16,22 @@ import (
 )
 
 func Command() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "webhook",
+		Short: "Webhook commands",
+		Long:  "Commands for managing webhooks",
+	}
+
+	// Add the test subcommand
+	cmd.AddCommand(test.Command())
+
+	// Add the get webhook by ID subcommand
+	cmd.AddCommand(getWebhookCommand())
+
+	return cmd
+}
+
+func getWebhookCommand() *cobra.Command {
 	var hookID string
 
 	cmd := &cobra.Command{
