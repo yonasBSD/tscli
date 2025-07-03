@@ -69,6 +69,8 @@ github.com/inconshreveable/mousetrap v1.1.0 h1:wN+x4NVGpMsO7ErUn/mUI3vEoE6Jt13X2
 github.com/inconshreveable/mousetrap v1.1.0/go.mod h1:vpF70FUmC8bwa3OWnCshd2FqLfsEA9PFc4w1p2J65bw=
 github.com/jaxxstorm/vers v0.0.0-20250701044105-e3c5a13decb4 h1:5FoKQdjsrMFwqL19Gn5lhRTfw+/a3lPlICzIp5zMTjE=
 github.com/jaxxstorm/vers v0.0.0-20250701044105-e3c5a13decb4/go.mod h1:MdYMhmKfwEo/AwqX/dTo4mB9/lnB8Je+eXnWyQbXQbY=
+github.com/jaxxstorm/vers v0.0.3 h1:1gX03shJ+4UcIA55eDnZ1sSGbswBTz7CEtnnFBbsFTs=
+github.com/jaxxstorm/vers v0.0.3/go.mod h1:MdYMhmKfwEo/AwqX/dTo4mB9/lnB8Je+eXnWyQbXQbY=
 github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 h1:BQSFePA1RWJOlocH6Fxy8MmwDt+yVQYULKfN0RoTN8A=
 github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99/go.mod h1:1lJo3i6rXxKeerYnT8Nvf0QmHCRC1n8sfWVwXF2Frvo=
 github.com/kevinburke/ssh_config v1.2.0 h1:x584FjTGwHzMwvHx18PXxbBVzfnxogHaAReU4gf13a4=

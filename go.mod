@@ -7,7 +7,7 @@ toolchain go1.24.4
 require (
 	github.com/charmbracelet/fang v0.2.0
 	github.com/charmbracelet/lipgloss v1.1.0
-	github.com/jaxxstorm/vers v0.0.0-20250701044105-e3c5a13decb4
+	github.com/jaxxstorm/vers v0.0.3
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/pflag v1.0.6
 	github.com/spf13/viper v1.20.1
