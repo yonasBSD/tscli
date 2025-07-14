@@ -2,6 +2,7 @@ package delete
 
 import (
 	"github.com/jaxxstorm/tscli/cmd/tscli/delete/device"
+	"github.com/jaxxstorm/tscli/cmd/tscli/delete/devices"
 	postureintegration "github.com/jaxxstorm/tscli/cmd/tscli/delete/integration"
 	"github.com/jaxxstorm/tscli/cmd/tscli/delete/key"
 	"github.com/jaxxstorm/tscli/cmd/tscli/delete/user"
@@ -17,6 +18,7 @@ func Command() *cobra.Command {
 	}
 
 	command.AddCommand(device.Command())
+	command.AddCommand(devices.Command())
 	command.AddCommand(user.Command())
 	command.AddCommand(key.Command())
 	command.AddCommand(webhook.Command())
