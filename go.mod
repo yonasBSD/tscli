@@ -2,7 +2,7 @@ module github.com/jaxxstorm/tscli
 
 go 1.24.0
 
-toolchain go1.24.4
+toolchain go1.24.5
 
 require (
 	github.com/charmbracelet/fang v0.3.0
