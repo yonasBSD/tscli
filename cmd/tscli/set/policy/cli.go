@@ -1,5 +1,5 @@
 // cmd/tscli/set/policy/cli.go
-package policyset
+package policy
 
 import (
 	"errors"
