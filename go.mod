@@ -15,7 +15,7 @@ require (
 	golang.org/x/oauth2 v0.30.0
 	golang.org/x/term v0.33.0
 	gopkg.in/yaml.v3 v3.0.1
-	tailscale.com/client/tailscale/v2 v2.0.0-20250714184745-d692cd62b191
+	tailscale.com/client/tailscale/v2 v2.0.0-20250721135607-5f581daaece7
 )
 
 require (

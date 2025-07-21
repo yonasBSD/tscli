@@ -201,3 +201,5 @@ tailscale.com/client/tailscale/v2 v2.0.0-20250616154411-35b8e02bd63e h1:X9wV8C5X
 tailscale.com/client/tailscale/v2 v2.0.0-20250616154411-35b8e02bd63e/go.mod h1:4akEJPbysqHWAP+t7CZLQ5ZH8/vZWeH6+Hv+fEJUMp0=
 tailscale.com/client/tailscale/v2 v2.0.0-20250714184745-d692cd62b191 h1:JE+IQOoOBQoli/OImRsEZt21/KMcA3komumwqINIUsc=
 tailscale.com/client/tailscale/v2 v2.0.0-20250714184745-d692cd62b191/go.mod h1:4akEJPbysqHWAP+t7CZLQ5ZH8/vZWeH6+Hv+fEJUMp0=
+tailscale.com/client/tailscale/v2 v2.0.0-20250721135607-5f581daaece7 h1:9rTFcSAHUmfMaOh8tO2+M3fgIumsPSDx61BoQtHZsqA=
+tailscale.com/client/tailscale/v2 v2.0.0-20250721135607-5f581daaece7/go.mod h1:4akEJPbysqHWAP+t7CZLQ5ZH8/vZWeH6+Hv+fEJUMp0=

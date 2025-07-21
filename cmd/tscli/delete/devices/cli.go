@@ -44,6 +44,7 @@ func Command() *cobra.Command {
 		lastSeenDuration time.Duration
 		exclude          []string
 		confirm          bool
+		ephemeral        bool
 	)
 
 	cmd := &cobra.Command{
@@ -62,6 +63,9 @@ Examples:
   # Show devices that would be deleted (default behavior)
   tscli delete devices --last-seen 15m
 
+  # Delete only ephemeral devices not seen for 1 hour
+  tscli delete devices --last-seen 1h --ephemeral --confirm
+
   # Delete devices not seen for 24 hours, excluding specific patterns
   tscli delete devices --last-seen 24h --exclude server --exclude prod --confirm
 
@@ -74,7 +78,7 @@ Examples:
 				return fmt.Errorf("failed to create client: %w", err)
 			}
 
-			summary, err := deleteDisconnectedDevices(cmd.Context(), client, lastSeenDuration, exclude, confirm)
+			summary, err := deleteDisconnectedDevices(cmd.Context(), client, lastSeenDuration, exclude, ephemeral, confirm)
 			if err != nil {
 				return fmt.Errorf("failed to delete devices: %w", err)
 			}
@@ -94,13 +98,15 @@ Examples:
 		"Duration to consider a device disconnected (e.g., 15m, 1h, 24h)")
 	cmd.Flags().StringSliceVar(&exclude, "exclude", nil,
 		"Device names to exclude by partial match (can be specified multiple times)")
+	cmd.Flags().BoolVar(&ephemeral, "ephemeral", false,
+		"Only delete ephemeral devices")
 	cmd.Flags().BoolVar(&confirm, "confirm", false,
 		"Actually delete devices (default is a dry run)")
 
 	return cmd
 }
 
-func deleteDisconnectedDevices(ctx context.Context, client *tsapi.Client, lastSeenTimeout time.Duration, excludedDevices []string, confirm bool) (*DeletionSummary, error) {
+func deleteDisconnectedDevices(ctx context.Context, client *tsapi.Client, lastSeenTimeout time.Duration, excludedDevices []string, ephemeralOnly bool, confirm bool) (*DeletionSummary, error) {
 	// List all devices with full details to get ephemeral status
 	devices, err := client.Devices().ListWithAllFields(ctx)
 	if err != nil {
@@ -116,6 +122,12 @@ func deleteDisconnectedDevices(ctx context.Context, client *tsapi.Client, lastSe
 		// Check if the device is in the exclusion list by partial match
 		if isExcluded(device.Name, excludedDevices) {
 			skippedDevices = append(skippedDevices, fmt.Sprintf("%s (excluded)", device.Name))
+			continue
+		}
+
+		// Check if we should only process ephemeral devices
+		if ephemeralOnly && !device.IsEphemeral {
+			skippedDevices = append(skippedDevices, fmt.Sprintf("%s (not ephemeral)", device.Name))
 			continue
 		}
 
