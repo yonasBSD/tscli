@@ -18,6 +18,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/jaxxstorm/tscli/pkg/version"
 	"github.com/spf13/viper"
 	tsapi "tailscale.com/client/tailscale/v2"
 )
@@ -26,6 +27,11 @@ const (
 	defaultBaseURL     = "https://api.tailscale.com"
 	defaultContentType = "application/json"
 )
+
+// getUserAgent returns the properly formatted user agent string
+func getUserAgent() string {
+	return fmt.Sprintf("tscli/%s (Go client)", version.GetVersion())
+}
 
 func New() (*tsapi.Client, error) {
 	tailnet := viper.GetString("tailnet")
@@ -37,15 +43,27 @@ func New() (*tsapi.Client, error) {
 		return nil, fmt.Errorf("api-key is required")
 	}
 
-	httpClient := &http.Client{}
+	userAgent := getUserAgent()
+
+	// Create a custom transport that ensures UserAgent is always set
+	transport := &userAgentTransport{
+		rt:        http.DefaultTransport,
+		userAgent: userAgent,
+	}
+
+	// Wrap with debug logging if enabled
 	if viper.GetBool("debug") {
-		httpClient.Transport = &logTransport{rt: http.DefaultTransport}
+		transport.rt = &logTransport{rt: transport.rt}
+	}
+
+	httpClient := &http.Client{
+		Transport: transport,
 	}
 
 	return &tsapi.Client{
 		Tailnet:   tailnet,
 		APIKey:    apiKey,
-		UserAgent: "tscli",
+		UserAgent: userAgent,
 		HTTP:      httpClient,
 	}, nil
 }
@@ -172,4 +190,16 @@ func (t *logTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 		os.Stderr.Write(dump)
 	}
 	return resp, nil
+}
+
+// userAgentTransport wraps an http.RoundTripper to ensure UserAgent is always set
+type userAgentTransport struct {
+	rt        http.RoundTripper
+	userAgent string
+}
+
+func (t *userAgentTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	// Always set our custom user agent
+	req.Header.Set("User-Agent", t.userAgent)
+	return t.rt.RoundTrip(req)
 }

@@ -16,15 +16,16 @@ import (
 
 func Command() *cobra.Command {
 	return &cobra.Command{
-		Use:   "nameservers",
-		Short: "List custom DNS nameservers for the tailnet",
+		Use:     "nameservers",
+		Aliases: []string{"ns"},
+		Short:   "List custom DNS nameservers for the tailnet",
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			client, err := tscli.New()
 			if err != nil {
 				return err
 			}
 
-			var raw json.RawMessage // <- receives the body untouched
+			var raw json.RawMessage
 			if _, err := tscli.Do(
 				context.Background(),
 				client,
