@@ -4,6 +4,7 @@ go 1.26.0
 
 require (
 	filippo.io/age v1.3.1
+	github.com/charmbracelet/bubbletea v1.3.4
 	github.com/charmbracelet/fang v1.0.0
 	github.com/charmbracelet/lipgloss v1.1.0
 	github.com/jaxxstorm/vers v0.0.3
@@ -12,7 +13,7 @@ require (
 	github.com/spf13/viper v1.21.0
 	github.com/tailscale/hujson v0.0.0-20260302212456-ecc657c15afd
 	golang.org/x/oauth2 v0.36.0
-	golang.org/x/term v0.42.0
+	golang.org/x/term v0.43.0
 	gopkg.in/yaml.v3 v3.0.1
 	tailscale.com/client/tailscale/v2 v2.9.1-0.20260406222307-5d0550509a1c
 )
@@ -25,7 +26,6 @@ require (
 	github.com/ProtonMail/go-crypto v1.4.1 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/blang/semver v3.5.1+incompatible // indirect
-	github.com/charmbracelet/bubbletea v1.3.4 // indirect
 	github.com/charmbracelet/colorprofile v0.4.3 // indirect
 	github.com/charmbracelet/ultraviolet v0.0.0-20260330092749-0f94982c930b // indirect
 	github.com/charmbracelet/x/ansi v0.11.6 // indirect
@@ -78,7 +78,7 @@ require (
 	golang.org/x/crypto v0.50.0 // indirect
 	golang.org/x/net v0.53.0 // indirect
 	golang.org/x/sync v0.20.0 // indirect
-	golang.org/x/sys v0.43.0 // indirect
+	golang.org/x/sys v0.44.0 // indirect
 	golang.org/x/text v0.36.0 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 )
