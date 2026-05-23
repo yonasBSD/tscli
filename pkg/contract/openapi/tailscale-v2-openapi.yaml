@@ -648,8 +648,6 @@ paths:
         User-managed attributes must be in the custom namespace,
         which is indicated by prefixing the attribute key with `custom:`.
 
-        Custom device posture attributes are available for the Personal and Enterprise plans.
-
         OAuth Scope: `devices:posture_attributes`.
       operationId: setCustomDevicePostureAttributes
       tags:
@@ -3019,8 +3017,6 @@ paths:
     post:
       summary: Suspend a user
       description: |
-        > ⓘ This endpoint is available for the [Personal and Enterprise plans](/pricing).
-
         Suspends a user from their tailnet. Learn more about [suspending users](/kb/1145/remove-team-members#suspending-users).
 
         OAuth Scope: `users`.
@@ -3047,8 +3043,6 @@ paths:
     post:
       summary: Restore a user
       description: |
-        > ⓘ This endpoint is available for the [Personal and Enterprise plans](/pricing).
-
         Restores a suspended user's access to their tailnet. Learn more about [restoring users](/kb/1145/remove-team-members#restoring-users).
 
         OAuth Scope: `users`.
@@ -3075,8 +3069,6 @@ paths:
     post:
       summary: Delete a user
       description: |
-        > ⓘ This endpoint is available for the [Personal and Enterprise plans](/pricing).
-
         Delete a user from their tailnet. Learn more about [deleting users](/kb/1145/remove-team-members#deleting-users).
 
         OAuth Scope: `users`.
@@ -3570,7 +3562,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/VIPServiceInfo'
+              $ref: '#/components/schemas/VIPServiceInfoPut'
       responses:
         '200':
           description: Successful operation.
@@ -4400,8 +4392,6 @@ components:
         postureIdentity:
           type: object
           description: |
-            > ⓘ This field is available for [Enterprise plans](/pricing).
-
             Contains extra identifiers from the device when the tailnet it is connected to has device posture identification collection enabled.
             If the device has not opted-in to posture identification collection, this will contain {"disabled": true}.
             Learn more about posture identity at https://tailscale.com/kb/1326/device-identity.
@@ -5951,10 +5941,7 @@ components:
         addrs:
           type: array
           description: |
-            The IP addresses assigned to the Service.
-
-            - For new Services: either unset or a single IPv4 to assign the Service.
-            - For existing Services: an IPv4 and an IPv6. The IPv4 can be updated, but not the IPv6.
+            The IP addresses assigned to the Service: the IPv4 followed by the IPv6.
           items:
             type: string
           example:
@@ -5982,6 +5969,23 @@ components:
             type: string
           example:
             - tag:example
+    VIPServiceInfoPut:
+      allOf:
+        - type: object
+          properties:
+            addrs:
+              type: array
+              description: |
+                The IP addresses assigned to the Service.
+
+                - For new Services: either unset or a single IPv4 to assign the Service.
+                - For existing Services: an IPv4 and an IPv6. The IPv4 can be updated, but not the IPv6.
+              items:
+                type: string
+              example:
+                - 100.93.49.180
+                - fd7a:115c:a1e0::3456:3cb4
+        - $ref: '#/components/schemas/VIPServiceInfo'
     ServiceHostInfo:
       type: object
       description: |
